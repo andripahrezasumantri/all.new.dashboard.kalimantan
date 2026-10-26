@@ -3,8 +3,8 @@
  * File ini memuat URL API, state global, serta fungsi pembantu yang digunakan di seluruh halaman.
  */
 
-// 1. URL Endpoint Google Apps Script
-const API_URL = "https://script.google.com/macros/s/AKfycbyDvQGuOFJVg9tQOUA_lQqL5e0t_Xdl0pDezExbhZ8Pq14zjnPYax1Baz-K6HHtbqM4/exec";[cite: 2]
+// 1. URL Endpoint Proxy Netlify (Mengarah ke _redirects ke Google Apps Script)
+const API_URL = "/api/";[cite: 2]
 
 // 2. Variable State Global Data Dashboard
 let rawDashboardData = null;[cite: 2]
