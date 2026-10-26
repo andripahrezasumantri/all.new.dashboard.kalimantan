@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reason & RCA Action Plan - Dashboard Regional Kalimantan</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(229, 231, 235, 1);
+        }
+        .nav-btn.active {
+            background-color: #4f46e5;
+            color: #ffffff;
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 font-sans text-slate-800">
+
+    <!-- Header / Navbar -->
+    <header class="bg-indigo-900 text-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-2">
+            <div class="flex items-center gap-3">
+                <i class="fa-solid fa-chart-line text-2xl text-amber-400"></i>
+                <div>
+                    <h1 class="text-xl font-bold tracking-wide">DASHBOARD REGIONAL KALIMANTAN</h1>
+                    <p class="text-xs text-indigo-200">Monitoring Performance Sales & Store Analytics</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2 text-xs bg-indigo-800/80 px-3 py-1.5 rounded-lg border border-indigo-700">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span id="lastUpdated">Status: Ready</span>
+            </div>
+        </div>
+
+        <!-- Navigation Bar (Multi-Page Link <a>) -->
+        <div class="bg-indigo-950/60 border-t border-indigo-800 px-4 sm:px-6 lg:px-8 overflow-x-auto">
+            <div class="max-w-7xl mx-auto flex gap-2 py-2 text-xs sm:text-sm whitespace-nowrap">
+                <a href="index.html" class="nav-btn px-4 py-2 rounded-lg text-indigo-200 hover:text-white hover:bg-indigo-800/50 transition flex items-center">
+                    <i class="fa-solid fa-shop mr-1.5"></i> Store Performance
+                </a>
+                <a href="sales-division.html" class="nav-btn px-4 py-2 rounded-lg text-indigo-200 hover:text-white hover:bg-indigo-800/50 transition flex items-center">
+                    <i class="fa-solid fa-layer-group mr-1.5"></i> Sales by Division
+                </a>
+                <a href="sales-channel.html" class="nav-btn px-4 py-2 rounded-lg text-indigo-200 hover:text-white hover:bg-indigo-800/50 transition flex items-center">
+                    <i class="fa-solid fa-diagram-project mr-1.5"></i> Sales Channel
+                </a>
+                <a href="new-initiative.html" class="nav-btn px-4 py-2 rounded-lg text-indigo-200 hover:text-white hover:bg-indigo-800/50 transition flex items-center">
+                    <i class="fa-solid fa-lightbulb mr-1.5"></i> New Initiative Brand (SUKO)
+                </a>
+                <a href="indicator-business.html" class="nav-btn px-4 py-2 rounded-lg text-indigo-200 hover:text-white hover:bg-indigo-800/50 transition flex items-center">
+                    <i class="fa-solid fa-gauge-high mr-1.5"></i> Indicator Business
+                </a>
+                <a href="reason-action.html" class="nav-btn active px-4 py-2 rounded-lg text-indigo-200 hover:text-white hover:bg-indigo-800/50 transition flex items-center">
+                    <i class="fa-solid fa-clipboard-question mr-1.5"></i> Reason & RCA Action Plan
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-7xl mx-auto px-4 py-5 sm:px-6 lg:px-8 space-y-5">
+
+        <!-- Control Bar / Global Filters (Read-only Sync ke RCA) -->
+        <section class="glass-card p-4 rounded-2xl shadow-sm">
+            <form id="filterForm" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">PILIH TOKO</label>
+                    <select id="kodeToko" onchange="syncRcaTokoDropdown()" class="w-full bg-white border border-slate-300 text-slate-700 text-sm rounded-xl focus:ring-indigo-500 focus:border-indigo-500 p-2 shadow-sm">
+                        <option value="ALL">REGIONAL KALIMANTAN (SEMUA TOKO)</option>
+                        <option value="253">MDS PALANGKARAYA (253)</option>
+                        <option value="283">MDS A YANI PONTIANAK (283)</option>
+                        <option value="284">MDS Q MALL BANJARBARU (284)</option>
+                        <option value="311">MDS DUTA MALL BANJARMASIN (311)</option>
+                        <option value="322">MDS SINGKAWANG (322)</option>
+                        <option value="327">MDS CITIMALL SAMPIT (327)</option>
+                        <option value="355">MDS BALIKPAPAN SUPERBLOK (355)</option>
+                        <option value="405">MDS LEMBUSWANA SAMARINDA (405)</option>
+                        <option value="408">MDS PLAZA BALIKPAPAN (408)</option>
+                        <option value="412">MDS CITIMALL BONTANG (412)</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">DARI TANGGAL (MTD)</label>
+                    <input type="date" id="startDate" onchange="updateRcaPeriodeReadonly()" class="w-full bg-white border border-slate-300 text-slate-700 text-sm rounded-xl focus:ring-indigo-500 focus:border-indigo-500 p-2 shadow-sm">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">SAMPAI TANGGAL (HARI INI)</label>
+                    <input type="date" id="endDate" onchange="updateRcaPeriodeReadonly()" class="w-full bg-white border border-slate-300 text-slate-700 text-sm rounded-xl focus:ring-indigo-500 focus:border-indigo-500 p-2 shadow-sm">
+                </div>
+
+                <div class="flex gap-2">
+                    <button type="button" onclick="loadReasonFeed()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium text-sm px-4 py-2 rounded-xl shadow transition duration-200 flex justify-center items-center gap-2">
+                        <i class="fa-solid fa-arrows-rotate"></i> Refresh Feed RCA
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <!-- ================= PAGE 6: REASON & RCA ACTION PLAN CONTENT ================= -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+            <!-- Left Column: Form Input / Edit RCA (5 Cols) -->
+            <section class="lg:col-span-5 glass-card p-5 rounded-2xl shadow-sm space-y-4">
+                <div class="flex justify-between items-center border-b border-slate-200 pb-3">
+                    <div>
+                        <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2">
+                            <i class="fa-solid fa-pen-to-square text-indigo-600"></i> FORM INPUT REASON & RCA
+                        </h3>
+                        <p class="text-[11px] text-slate-500">Pencatatan Root Cause Analysis Toko</p>
+                    </div>
+                    <span id="editBadgeInfo" class="hidden text-[10px] font-bold bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full">
+                        <i class="fa-solid fa-pen mr-1"></i> Mode Edit
+                    </span>
+                </div>
+
+                <form id="rcaForm" onsubmit="handleRcaSubmit(event)" class="space-y-3.5 text-xs">
+                    <input type="hidden" id="rcaEditId" value="">
+
+                    <div>
+                        <label class="block font-semibold text-slate-700 mb-1">TOKO LAPORAN</label>
+                        <select id="rcaKodeToko" required class="w-full bg-white border border-slate-300 rounded-xl p-2 text-slate-800 focus:ring-indigo-500">
+                            <option value="253">MDS PALANGKARAYA (253)</option>
+                            <option value="283">MDS A YANI PONTIANAK (283)</option>
+                            <option value="284">MDS Q MALL BANJARBARU (284)</option>
+                            <option value="311">MDS DUTA MALL BANJARMASIN (311)</option>
+                            <option value="322">MDS SINGKAWANG (322)</option>
+                            <option value="327">MDS CITIMALL SAMPIT (327)</option>
+                            <option value="355">MDS BALIKPAPAN SUPERBLOK (355)</option>
+                            <option value="405">MDS LEMBUSWANA SAMARINDA (405)</option>
+                            <option value="408">MDS PLAZA BALIKPAPAN (408)</option>
+                            <option value="412">MDS CITIMALL BONTANG (412)</option>
+                        </select>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">PERIODE</label>
+                            <input type="text" id="rcaPeriode" readonly class="w-full bg-slate-100 border border-slate-300 text-slate-600 rounded-xl p-2 font-medium">
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">TOPIK METRIK</label>
+                            <select id="rcaTopik" class="w-full bg-white border border-slate-300 rounded-xl p-2 text-slate-800 focus:ring-indigo-500">
+                                <option value="Overall Sales Toko">Overall Sales Toko</option>
+                                <option value="Bazaar Performance">Bazaar Performance</option>
+                                <option value="Shop & Talk (SnT)">Shop & Talk (SnT)</option>
+                                <option value="SUKO Initiative">SUKO Initiative</option>
+                                <option value="Traffic & Conversion">Traffic & Conversion</option>
+                                <option value="Inventory & Stock">Inventory & Stock</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block font-semibold text-slate-700 mb-1">KATEGORI RCA</label>
+                        <select id="rcaKategori" onchange="toggleExternalFactors()" required class="w-full bg-white border border-slate-300 rounded-xl p-2 text-slate-800 focus:ring-indigo-500">
+                            <option value="Traffic & Mall Condition">Traffic & Mall Condition</option>
+                            <option value="Merchandise & Stock Availability">Merchandise & Stock Availability</option>
+                            <option value="Promotion & Marketing Impact">Promotion & Marketing Impact</option>
+                            <option value="Manpower & Store Operational">Manpower & Store Operational</option>
+                            <option value="External Factors / Force Majeure">External Factors / Force Majeure</option>
+                        </select>
+                    </div>
+
+                    <div id="wrapperExternalDetail" class="hidden">
+                        <label class="block font-semibold text-indigo-700 mb-1">FAKTOR EKSTERNAL (JIKA PILIH FORCE MAJEURE)</label>
+                        <input type="text" id="rcaDetailEksternal" placeholder="Contoh: Bencana Banjir, Renovasi Mall, Listrik Padam" class="w-full bg-indigo-50/50 border border-indigo-200 text-slate-800 rounded-xl p-2">
+                    </div>
+
+                    <div>
+                        <label class="block font-semibold text-slate-700 mb-1">PENJELASAN ROOT CAUSE (RCA)</label>
+                        <textarea id="rcaDetailRCA" rows="3" required placeholder="Jelaskan secara mendetail akar masalah penyebab achievement naik/turun..." class="w-full bg-white border border-slate-300 rounded-xl p-2 text-slate-800 focus:ring-indigo-500"></textarea>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block font-semibold text-emerald-700 mb-1">WHAT WORKED</label>
+                            <textarea id="rcaWhatWorked" rows="2" placeholder="Hal yang berhasil dilakukan..." class="w-full bg-emerald-50/30 border border-emerald-200 rounded-xl p-2 text-slate-800"></textarea>
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-rose-700 mb-1">WHAT DIDN'T WORK</label>
+                            <textarea id="rcaWhatDidntWork" rows="2" placeholder="Hal yang belum efektif..." class="w-full bg-rose-50/30 border border-rose-200 rounded-xl p-2 text-slate-800"></textarea>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block font-semibold text-slate-700 mb-1">ACTION PLAN & RECOVERY STRATEGY</label>
+                        <textarea id="rcaActionPlan" rows="3" required placeholder="Langkah perbaikan spesifik yang akan dijalankan toko..." class="w-full bg-white border border-slate-300 rounded-xl p-2 text-slate-800 focus:ring-indigo-500"></textarea>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">TARGET RECOVERY DATE</label>
+                            <input type="date" id="rcaTargetDate" required class="w-full bg-white border border-slate-300 rounded-xl p-2 text-slate-800">
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">STATUS</label>
+                            <select id="rcaStatus" class="w-full bg-white border border-slate-300 rounded-xl p-2 text-slate-800">
+                                <option value="OPEN">OPEN (In Progress)</option>
+                                <option value="RESOLVED">RESOLVED (Selesai)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="pt-2 flex gap-2">
+                        <button type="submit" id="btnSubmitRca" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-xl shadow transition duration-200 flex justify-center items-center gap-2">
+                            <i class="fa-solid fa-paper-plane"></i> Kirim Laporan RCA
+                        </button>
+                        <button type="button" id="btnCancelEdit" onclick="cancelEditMode()" class="hidden bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-4 py-2.5 rounded-xl transition">
+                            Batal
+                        </button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- Right Column: Card Feed Monitoring RCA (7 Cols) -->
+            <section class="lg:col-span-7 glass-card p-5 rounded-2xl shadow-sm space-y-4">
+                <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-2 border-b border-slate-200 pb-3">
+                    <div>
+                        <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2">
+                            <i class="fa-solid fa-rss text-indigo-600"></i> MONITORING FEED RCA REGIONAL
+                        </h3>
+                        <p class="text-[11px] text-slate-500">Histori laporan dan action plan terkelompok per toko</p>
+                    </div>
+                    <div>
+                        <select id="filterRcaStoreFeed" onchange="renderReasonCards()" class="bg-white border border-slate-300 text-xs font-semibold text-slate-700 rounded-xl p-2">
+                            <option value="ALL">Semua Toko Feed</option>
+                            <option value="253">MDS PALANGKARAYA (253)</option>
+                            <option value="283">MDS A YANI PONTIANAK (283)</option>
+                            <option value="284">MDS Q MALL BANJARBARU (284)</option>
+                            <option value="311">MDS DUTA MALL BANJARMASIN (311)</option>
+                            <option value="322">MDS SINGKAWANG (322)</option>
+                            <option value="327">MDS CITIMALL SAMPIT (327)</option>
+                            <option value="355">MDS BALIKPAPAN SUPERBLOK (355)</option>
+                            <option value="405">MDS LEMBUSWANA SAMARINDA (405)</option>
+                            <option value="408">MDS PLAZA BALIKPAPAN (408)</option>
+                            <option value="412">MDS CITIMALL BONTANG (412)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Feed Container -->
+                <div id="rcaCardFeedContainer" class="space-y-4 max-h-[750px] overflow-y-auto pr-1">
+                    <div class="text-center py-8 text-slate-400 text-xs">
+                        <i class="fa-solid fa-spinner animate-spin text-lg mb-2"></i>
+                        <p>Memuat feed laporan RCA toko...</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+    </main>
+
+    <!-- Load Config & Helpers Script -->
+    <script src="js/config.js"></script>
+    <!-- Load RCA Logic Script -->
+    <script src="js/rca.js"></script>
+
+    <!-- Page Initialization Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initDefaultDates();
+            syncRcaTokoDropdown();
+            loadReasonFeed();
+        });
+    </script>
+</body>
+</html>
