@@ -3,11 +3,11 @@
  * File ini memuat URL API, state global, serta fungsi pembantu yang digunakan di seluruh halaman.
  */
 
-// 1. URL Endpoint Proxy Netlify (Mengarah ke _redirects ke Google Apps Script)
-const API_URL = "/api/";[cite: 2]
+// 1. URL Endpoint Direct Google Apps Script Web App
+const API_URL = "https://script.google.com/macros/s/AKfycbyDvQGuOFJVg9tQOUA_lQqL5e0t_Xdl0pDezExbhZ8Pq14zjnPYax1Baz-K6HHtbqM4/exec";
 
 // 2. Variable State Global Data Dashboard
-let rawDashboardData = null;[cite: 2]
+let rawDashboardData = null;
 
 // 3. Pengaturan Tanggal Default (Awal Bulan MTD s/d Hari Ini)
 function initDefaultDates() {
@@ -19,8 +19,8 @@ function initDefaultDates() {
     const startDateElem = document.getElementById('startDate');
     const endDateElem = document.getElementById('endDate');
 
-    if (startDateElem) startDateElem.value = `${year}-${month}-01`;[cite: 2]
-    if (endDateElem) endDateElem.value = `${year}-${month}-${day}`;[cite: 2]
+    if (startDateElem) startDateElem.value = `${year}-${month}-01`;
+    if (endDateElem) endDateElem.value = `${year}-${month}-${day}`;
     
     updateRcaPeriodeReadonly();
 }
@@ -32,7 +32,7 @@ function updateRcaPeriodeReadonly() {
     const rcaPeriodeElem = document.getElementById('rcaPeriode');
 
     if (startElem && endElem && rcaPeriodeElem) {
-        rcaPeriodeElem.value = `${startElem.value} s/d ${endElem.value}`;[cite: 2]
+        rcaPeriodeElem.value = `${startElem.value} s/d ${endElem.value}`;
     }
 }
 
@@ -44,36 +44,36 @@ function syncRcaTokoDropdown() {
     if (globalTokoElem && rcaKodeTokoElem) {
         const globalToko = globalTokoElem.value;
         if (globalToko !== 'ALL') {
-            rcaKodeTokoElem.value = globalToko;[cite: 2]
+            rcaKodeTokoElem.value = globalToko;
         }
     }
 }
 
 // 6. Helper Format Angka Mata Uang Rupiah
 function formatRupiah(num) {
-    if (num === null || num === undefined) return 'Rp 0';[cite: 2]
-    return 'Rp ' + Number(num).toLocaleString('id-ID');[cite: 2]
+    if (num === null || num === undefined) return 'Rp 0';
+    return 'Rp ' + Number(num).toLocaleString('id-ID');
 }
 
 // 7. Helper Format Angka Biasa (Ribuan)
 function formatNumber(num) {
-    if (num === null || num === undefined) return '0';[cite: 2]
-    return Number(num).toLocaleString('id-ID');[cite: 2]
+    if (num === null || num === undefined) return '0';
+    return Number(num).toLocaleString('id-ID');
 }
 
 // 8. Helper Badge Warna Pertumbuhan/Growth (%)
 function setGrowthBadge(elemId, val) {
     const elem = document.getElementById(elemId);
     if (!elem) return;
-    const numVal = parseFloat(val) || 0;[cite: 2]
-    elem.innerText = (numVal > 0 ? '+' : '') + numVal + '%';[cite: 2]
+    const numVal = parseFloat(val) || 0;
+    elem.innerText = (numVal > 0 ? '+' : '') + numVal + '%';
     
     if (numVal > 0) {
-        elem.className = 'font-bold text-emerald-600';[cite: 2]
+        elem.className = 'font-bold text-emerald-600';
     } else if (numVal < 0) {
-        elem.className = 'font-bold text-rose-600';[cite: 2]
+        elem.className = 'font-bold text-rose-600';
     } else {
-        elem.className = 'font-bold text-slate-500';[cite: 2]
+        elem.className = 'font-bold text-slate-500';
     }
 }
 
@@ -82,8 +82,8 @@ function showLoading(isLoading) {
     const loading = document.getElementById('loadingState');
     if (!loading) return;
     if (isLoading) {
-        loading.classList.remove('hidden');[cite: 2]
+        loading.classList.remove('hidden');
     } else {
-        loading.classList.add('hidden');[cite: 2]
+        loading.classList.add('hidden');
     }
 }
