@@ -1,1574 +1,3363 @@
 <!DOCTYPE html>
+
 <html lang="id">
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Dashboard Regional Kalimantan</title>
+
     <!-- Tailwind CSS CDN -->
+
     <script src="https://cdn.tailwindcss.com"></script>
+
     <!-- Chart.js CDN -->
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <!-- FontAwesome Icons -->
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
+
         .glass-card {
+
             background: rgba(255, 255, 255, 0.9);
+
             backdrop-filter: blur(10px);
+
             border: 1px solid rgba(229, 231, 235, 1);
+
         }
+
         .tab-btn.active {
+
             background-color: #4f46e5;
+
             color: #ffffff;
+
             font-weight: 600;
+
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+
         }
+
         th.sortable {
+
             cursor: pointer;
+
             user-select: none;
+
         }
+
         th.sortable:hover {
+
             background-color: rgba(226, 232, 240, 0.8);
+
         }
+
         .sticky-col {
+
             position: sticky;
+
             left: 0;
+
             background-color: #ffffff;
+
             z-index: 20;
+
             border-right: 2px solid #e2e8f0;
+
         }
+
         th.sticky-col {
+
             background-color: #f1f5f9;
+
             z-index: 30;
+
         }
+
+        /* Custom Tooltip Styling for Single Store Hover (Opsi 3) - Fixed Z-Index & Stacking */
+
+        .kpi-hover-card {
+
+            position: relative;
+
+            z-index: 30; /* Elevate card stack context */
+
+        }
+
+        .kpi-hover-card:hover {
+
+            z-index: 50; /* Bring hovered card to highest priority */
+
+        }
+
+        .kpi-tooltip {
+
+            visibility: hidden;
+
+            opacity: 0;
+
+            transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+
+            transform: translateY(6px);
+
+            z-index: 9999 !important; /* Force bring to front */
+
+        }
+
+        .kpi-hover-card:hover .kpi-tooltip {
+
+            visibility: visible;
+
+            opacity: 1;
+
+            transform: translateY(0);
+
+        }
+
     </style>
+
 </head>
+
 <body class="bg-slate-50 font-sans text-slate-800">
 
+
+
     <!-- Header / Navbar -->
+
     <header class="bg-indigo-900 text-white shadow-md sticky top-0 z-50">
+
         <div class="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-2">
+
             <div class="flex items-center gap-3">
+
                 <i class="fa-solid fa-chart-line text-2xl text-amber-400"></i>
+
                 <div>
+
                     <h1 class="text-xl font-bold tracking-wide">DASHBOARD REGIONAL KALIMANTAN</h1>
+
                     <p class="text-xs text-indigo-200">Monitoring Performance Sales & Store Analytics</p>
+
                 </div>
+
             </div>
+
             <div class="flex items-center gap-2 text-xs bg-indigo-800/80 px-3 py-1.5 rounded-lg border border-indigo-700">
+
                 <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+
                 <span id="lastUpdated">Status: Ready</span>
+
             </div>
+
         </div>
+
+
 
         <!-- Navigation Tabs Bar -->
+
         <div class="bg-indigo-950/60 border-t border-indigo-800 px-4 sm:px-6 lg:px-8 overflow-x-auto">
-            <div class="max-w-7xl mx-auto flex gap-2 py-2 text-xs sm:text-sm whitespace-nowrap">
+
+            <div class="max-w-7xl mx-auto flex items-center gap-2 py-2 text-xs sm:text-sm whitespace-nowrap">
+
                 <button onclick="switchTab('store-performance')" id="tab-store-performance" class="tab-btn active px-4 py-2 rounded-lg text-indigo-200 hover:text-white hover:bg-indigo-800/50 transition">
+
                     <i class="fa-solid fa-shop mr-1.5"></i> Store Performance
+
                 </button>
+
                 <button onclick="switchTab('sales-division')" id="tab-sales-division" class="tab-btn px-4 py-2 rounded-lg text-indigo-200 hover:text-white hover:bg-indigo-800/50 transition">
+
                     <i class="fa-solid fa-layer-group mr-1.5"></i> Sales by Division
+
                 </button>
+
                 <button onclick="switchTab('sales-channel')" id="tab-sales-channel" class="tab-btn px-4 py-2 rounded-lg text-indigo-200 hover:text-white hover:bg-indigo-800/50 transition">
+
                     <i class="fa-solid fa-diagram-project mr-1.5"></i> Sales Channel
+
                 </button>
+
                 <button onclick="switchTab('new-initiative')" id="tab-new-initiative" class="tab-btn px-4 py-2 rounded-lg text-indigo-200 hover:text-white hover:bg-indigo-800/50 transition">
+
                     <i class="fa-solid fa-lightbulb mr-1.5"></i> New Initiative Brand (SUKO)
+
                 </button>
+
                 <button onclick="switchTab('indicator-business')" id="tab-indicator-business" class="tab-btn px-4 py-2 rounded-lg text-indigo-200 hover:text-white hover:bg-indigo-800/50 transition">
+
                     <i class="fa-solid fa-gauge-high mr-1.5"></i> Indicator Business
+
                 </button>
+
+
+
+                <!-- TOMBOL NAVIGASI KE FORM ENTRY (ENTRY.HTML) -->
+
+                <a href="entry.html" class="ml-auto px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold shadow transition flex items-center gap-1.5 border border-emerald-500">
+
+                    <i class="fa-solid fa-pen-to-square"></i> + Form Entry
+
+                </a>
+
             </div>
+
         </div>
+
     </header>
 
+
+
     <!-- Main Container -->
+
     <main class="max-w-7xl mx-auto px-4 py-5 sm:px-6 lg:px-8 space-y-5">
 
+
+
         <!-- Control Bar / Global Filters -->
+
         <section class="glass-card p-4 rounded-2xl shadow-sm">
+
             <form id="filterForm" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+
                 <div>
+
                     <label class="block text-xs font-semibold text-slate-600 mb-1">PILIH TOKO</label>
+
                     <select id="kodeToko" class="w-full bg-white border border-slate-300 text-slate-700 text-sm rounded-xl focus:ring-indigo-500 focus:border-indigo-500 p-2 shadow-sm">
+
                         <option value="ALL">REGIONAL KALIMANTAN (SEMUA TOKO)</option>
+
                         <option value="253">MDS PALANGKARAYA (253)</option>
+
                         <option value="283">MDS A YANI PONTIANAK (283)</option>
+
                         <option value="284">MDS Q MALL BANJARBARU (284)</option>
+
                         <option value="311">MDS DUTA MALL BANJARMASIN (311)</option>
+
                         <option value="322">MDS SINGKAWANG (322)</option>
+
                         <option value="327">MDS CITIMALL SAMPIT (327)</option>
+
                         <option value="355">MDS BALIKPAPAN SUPERBLOK (355)</option>
+
                         <option value="405">MDS LEMBUSWANA SAMARINDA (405)</option>
+
                         <option value="408">MDS PLAZA BALIKPAPAN (408)</option>
+
                         <option value="412">MDS CITIMALL BONTANG (412)</option>
+
                     </select>
+
                 </div>
 
+
+
                 <div>
+
                     <label class="block text-xs font-semibold text-slate-600 mb-1">DARI TANGGAL (MTD)</label>
+
                     <input type="date" id="startDate" class="w-full bg-white border border-slate-300 text-slate-700 text-sm rounded-xl focus:ring-indigo-500 focus:border-indigo-500 p-2 shadow-sm">
+
                 </div>
 
+
+
                 <div>
+
                     <label class="block text-xs font-semibold text-slate-600 mb-1">SAMPAI TANGGAL (HARI INI)</label>
+
                     <input type="date" id="endDate" class="w-full bg-white border border-slate-300 text-slate-700 text-sm rounded-xl focus:ring-indigo-500 focus:border-indigo-500 p-2 shadow-sm">
+
                 </div>
+
+
 
                 <div class="flex gap-2">
+
                     <button type="submit" id="btnFilter" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium text-sm px-4 py-2 rounded-xl shadow transition duration-200 flex justify-center items-center gap-2">
+
                         <i class="fa-solid fa-filter"></i> Terapkan Filter
+
                     </button>
+
                 </div>
+
             </form>
+
         </section>
 
+
+
         <!-- Loading Overlay / Spinner -->
+
         <div id="loadingState" class="hidden flex flex-col items-center justify-center py-12">
+
             <div class="inline-block animate-spin rounded-full h-10 w-10 border-4 border-indigo-600 border-t-transparent mb-3"></div>
+
             <p class="text-sm font-medium text-slate-500">Mengambil data dari Apps Script...</p>
+
         </div>
+
+
 
         <!-- ================= PAGE 1: STORE PERFORMANCE ================= -->
+
         <div id="page-store-performance" class="page-content space-y-5">
+
             <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+
                 <div class="glass-card p-4 rounded-2xl shadow-sm border-l-4 border-l-indigo-600">
+
                     <div class="flex justify-between items-start">
+
                         <div>
+
                             <p class="text-[11px] font-medium text-slate-500">TOTAL SALES</p>
+
                             <h3 id="cardTotalSales" class="text-xl font-bold text-slate-800 mt-1">Rp 0</h3>
+
                         </div>
+
                         <div class="p-2 bg-indigo-50 rounded-xl text-indigo-600"><i class="fa-solid fa-money-bill-wave"></i></div>
+
                     </div>
+
                     <div class="mt-2 text-xs text-slate-500">
+
                         Kontribusi: <span id="cardKontribusi" class="font-semibold text-indigo-600">0%</span> dari Regional
+
                     </div>
+
                 </div>
+
+
 
                 <div class="glass-card p-4 rounded-2xl shadow-sm border-l-4 border-l-sky-500">
+
                     <div class="flex justify-between items-start">
+
                         <div>
+
                             <p class="text-[11px] font-medium text-slate-500">TOTAL TARGET STORE</p>
+
                             <h3 id="cardTotalTarget" class="text-xl font-bold text-slate-800 mt-1">Rp 0</h3>
+
                         </div>
+
                         <div class="p-2 bg-sky-50 rounded-xl text-sky-600"><i class="fa-solid fa-bullseye"></i></div>
+
                     </div>
+
                     <div class="mt-2 text-xs text-slate-500">Target Toko Utama</div>
+
                 </div>
+
+
 
                 <div class="glass-card p-4 rounded-2xl shadow-sm border-l-4 border-l-emerald-500">
+
                     <div class="flex justify-between items-start">
+
                         <div>
+
                             <p class="text-[11px] font-medium text-slate-500">ACHIEVEMENT (%)</p>
+
                             <h3 id="cardAchievement" class="text-xl font-bold text-emerald-600 mt-1">0%</h3>
+
                         </div>
+
                         <div class="p-2 bg-emerald-50 rounded-xl text-emerald-600"><i class="fa-solid fa-trophy"></i></div>
+
                     </div>
+
                     <div class="mt-2 text-xs text-slate-500">Pencapaian vs Target</div>
+
                 </div>
 
-                <div class="glass-card p-4 rounded-2xl shadow-sm border-l-4 border-l-amber-500">
+
+
+                <!-- CARD GROWTH SALES + HOVER TOOLTIP UNTUK SINGLE STORE (OPSI 3) -->
+
+                <div class="glass-card p-4 rounded-2xl shadow-sm border-l-4 border-l-amber-500 relative kpi-hover-card">
+
                     <div class="flex justify-between items-start">
+
                         <div class="w-full">
+
                             <p class="text-[11px] font-medium text-slate-500">SALES GROWTH (YoY)</p>
+
                             <div class="mt-1 space-y-0.5">
+
                                 <div class="flex justify-between items-center pr-2">
+
                                     <span class="text-xs font-medium text-slate-500">Grego:</span>
+
                                     <span id="cardGrowthGrego" class="text-xs font-bold text-slate-800">0%</span>
+
                                 </div>
+
                                 <div class="flex justify-between items-center pr-2">
+
                                     <span class="text-xs font-medium text-slate-500">Fiscal:</span>
+
                                     <span id="cardGrowthFiscal" class="text-xs font-bold text-slate-800">0%</span>
+
                                 </div>
+
                             </div>
+
                         </div>
+
                         <div class="p-2 bg-amber-50 rounded-xl text-amber-600"><i class="fa-solid fa-chart-line"></i></div>
+
                     </div>
+
+
+
+                    <!-- OPSI 3: POP-UP HOVER TOOLTIP (BRING TO FRONT WITH Z-INDEX) -->
+
+                    <div id="p1-kpi-tooltip" class="kpi-tooltip hidden absolute left-0 right-0 top-full mt-2 p-3 bg-slate-900 text-white border border-indigo-500/50 rounded-xl shadow-2xl pointer-events-none">
+
+                        <p class="text-[10px] font-bold text-amber-400 uppercase tracking-wider mb-1.5 flex items-center gap-1">
+
+                            <i class="fa-solid fa-circle-info"></i> Selisih Nominal Uang (YoY)
+
+                        </p>
+
+                        <div class="space-y-1 text-xs">
+
+                            <div class="flex justify-between items-center">
+
+                                <span class="text-slate-300">Grego:</span>
+
+                                <span id="tooltip-diffGrego" class="font-bold text-emerald-400">Rp 0</span>
+
+                            </div>
+
+                            <div class="flex justify-between items-center">
+
+                                <span class="text-slate-300">Fiscal:</span>
+
+                                <span id="tooltip-diffFiscal" class="font-bold text-emerald-400">Rp 0</span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
                 </div>
+
             </section>
+
+
 
             <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3">
+
                 <div class="glass-card p-3 rounded-xl shadow-sm flex flex-col justify-between">
+
                     <div>
+
                         <p class="text-[11px] font-medium text-slate-500">TOTAL TRX</p>
+
                         <p id="cardTrx" class="text-base font-bold text-slate-800 mt-0.5">0</p>
+
                     </div>
+
                     <div class="mt-2 pt-1.5 border-t border-slate-100 text-[10px] space-y-0.5">
+
                         <div class="flex justify-between"><span class="text-slate-400">Grego:</span><span id="trxGrego" class="font-semibold">0%</span></div>
+
                         <div class="flex justify-between"><span class="text-slate-400">Fiscal:</span><span id="trxFiscal" class="font-semibold">0%</span></div>
+
                     </div>
+
                 </div>
 
+
+
                 <div class="glass-card p-3 rounded-xl shadow-sm flex flex-col justify-between">
+
                     <div>
+
                         <p class="text-[11px] font-medium text-slate-500">TOTAL QTY</p>
+
                         <p id="cardQty" class="text-base font-bold text-slate-800 mt-0.5">0</p>
+
                     </div>
+
                     <div class="mt-2 pt-1.5 border-t border-slate-100 text-[10px] space-y-0.5">
+
                         <div class="flex justify-between"><span class="text-slate-400">Grego:</span><span id="qtyGrego" class="font-semibold">0%</span></div>
+
                         <div class="flex justify-between"><span class="text-slate-400">Fiscal:</span><span id="qtyFiscal" class="font-semibold">0%</span></div>
+
                     </div>
+
                 </div>
 
+
+
                 <div class="glass-card p-3 rounded-xl shadow-sm flex flex-col justify-between">
+
                     <div>
+
                         <p class="text-[11px] font-medium text-slate-500">TRAFFIC</p>
+
                         <p id="cardTraffic" class="text-base font-bold text-slate-800 mt-0.5">0</p>
+
                     </div>
+
                     <div class="mt-2 pt-1.5 border-t border-slate-100 text-[10px] space-y-0.5">
+
                         <div class="flex justify-between"><span class="text-slate-400">Grego:</span><span id="trafficGrego" class="font-semibold">0%</span></div>
+
                         <div class="flex justify-between"><span class="text-slate-400">Fiscal:</span><span id="trafficFiscal" class="font-semibold">0%</span></div>
+
                     </div>
+
                 </div>
 
+
+
                 <div class="glass-card p-3 rounded-xl shadow-sm flex flex-col justify-between">
+
                     <div>
+
                         <p class="text-[11px] font-medium text-slate-500">BASKET SIZE (AUC)</p>
+
                         <p id="cardBasketSize" class="text-base font-bold text-slate-800 mt-0.5">Rp 0</p>
+
                     </div>
+
                     <div class="mt-2 pt-1.5 border-t border-slate-100 text-[10px] space-y-0.5">
+
                         <div class="flex justify-between"><span class="text-slate-400">Grego:</span><span id="basketSizeGrego" class="font-semibold">0%</span></div>
+
                         <div class="flex justify-between"><span class="text-slate-400">Fiscal:</span><span id="basketSizeFiscal" class="font-semibold">0%</span></div>
+
                     </div>
+
                 </div>
 
+
+
                 <div class="glass-card p-3 rounded-xl shadow-sm flex flex-col justify-between">
+
                     <div>
+
                         <p class="text-[11px] font-medium text-slate-500">AUR (AVG UNIT RETAIL)</p>
+
                         <p id="cardAUR" class="text-base font-bold text-slate-800 mt-0.5">Rp 0</p>
+
                     </div>
+
                     <div class="mt-2 pt-1.5 border-t border-slate-100 text-[10px] space-y-0.5">
+
                         <div class="flex justify-between"><span class="text-slate-400">Grego:</span><span id="aurGrego" class="font-semibold">0%</span></div>
+
                         <div class="flex justify-between"><span class="text-slate-400">Fiscal:</span><span id="aurFiscal" class="font-semibold">0%</span></div>
+
                     </div>
+
                 </div>
 
+
+
                 <div class="glass-card p-3 rounded-xl shadow-sm flex flex-col justify-between">
+
                     <div>
+
                         <p class="text-[11px] font-medium text-slate-500">UPT (UNIT / TRX)</p>
+
                         <p id="cardUPT" class="text-base font-bold text-slate-800 mt-0.5">0</p>
+
                     </div>
+
                     <div class="mt-2 pt-1.5 border-t border-slate-100 text-[10px] space-y-0.5">
+
                         <div class="flex justify-between"><span class="text-slate-400">Grego:</span><span id="uptGrego" class="font-semibold">0%</span></div>
+
                         <div class="flex justify-between"><span class="text-slate-400">Fiscal:</span><span id="uptFiscal" class="font-semibold">0%</span></div>
+
                     </div>
+
                 </div>
+
             </section>
+
+
 
             <section id="panelAllStores" class="glass-card p-4 rounded-2xl shadow-sm space-y-3">
+
                 <div class="flex justify-between items-center border-b border-slate-200 pb-2">
+
                     <h4 class="text-sm font-bold text-slate-800 flex items-center gap-2">
+
                         <i class="fa-solid fa-list-check text-indigo-600"></i> BREAKDOWN PERFORMANCE PER TOKO
+
                     </h4>
+
                     <span class="text-xs bg-indigo-50 text-indigo-700 px-3 py-1 rounded-full font-medium">
+
                         <i class="fa-solid fa-arrows-left-right mr-1"></i> Geser Samping & Klik Judul Kolom
+
                     </span>
+
                 </div>
+
                 
+
                 <div class="overflow-x-auto relative rounded-xl border border-slate-200 shadow-inner">
+
                     <table class="w-full text-left text-xs text-slate-700 whitespace-nowrap">
+
                         <thead class="bg-slate-100 text-slate-600 font-semibold uppercase tracking-wider">
+
                             <tr>
+
                                 <th onclick="sortTable('nama')" class="sortable sticky-col p-3 shadow-sm min-w-[180px]">Toko <span id="sort-icon-nama"></span></th>
+
                                 <th onclick="sortTable('sales')" class="sortable p-3 text-right">Sales <span id="sort-icon-sales"><i class="fa-solid fa-arrow-down text-indigo-600 ml-1"></i></span></th>
+
                                 <th onclick="sortTable('target')" class="sortable p-3 text-right">Target <span id="sort-icon-target"></span></th>
+
                                 <th onclick="sortTable('achievementPercent')" class="sortable p-3 text-center">Ach (%) <span id="sort-icon-achievementPercent"></span></th>
+
                                 <th onclick="sortTable('kontribusiPercent')" class="sortable p-3 text-center">Kontrib (%) <span id="sort-icon-kontribusiPercent"></span></th>
+
                                 <th onclick="sortTable('growthGregoPercent')" class="sortable p-3 text-center">Grego (%) <span id="sort-icon-growthGregoPercent"></span></th>
+
+                                
+
+                                <!-- OPSI 2: KOLOM RP SAVING / HUTANG GREGO (MUNCUL SAAT FILTER = ALL) -->
+
+                                <th id="th-varGrego" class="sortable p-3 text-right bg-indigo-50/60 text-indigo-900 font-bold">Variance Grego (Rp) <span id="sort-icon-diffGregoYoYAmount"></span></th>
+
+                                
+
                                 <th onclick="sortTable('growthFiscalPercent')" class="sortable p-3 text-center">Fiscal (%) <span id="sort-icon-growthFiscalPercent"></span></th>
+
+                                
+
+                                <!-- OPSI 2: KOLOM RP SAVING / HUTANG FISCAL (MUNCUL SAAT FILTER = ALL) -->
+
+                                <th id="th-varFiscal" class="sortable p-3 text-right bg-indigo-50/60 text-indigo-900 font-bold">Variance Fiscal (Rp) <span id="sort-icon-diffFiscalYoYAmount"></span></th>
+
+
+
                                 <th onclick="sortTable('trx')" class="sortable p-3 text-right">TRX <span id="sort-icon-trx"></span></th>
+
                                 <th onclick="sortTable('qty')" class="sortable p-3 text-right">QTY <span id="sort-icon-qty"></span></th>
+
                                 <th onclick="sortTable('basketSize')" class="sortable p-3 text-right bg-indigo-50/50">Basket Size (AUC) <span id="sort-icon-basketSize"></span></th>
+
                                 <th onclick="sortTable('aur')" class="sortable p-3 text-right bg-indigo-50/50">AUR <span id="sort-icon-aur"></span></th>
+
                                 <th onclick="sortTable('upt')" class="sortable p-3 text-right bg-indigo-50/50">UPT <span id="sort-icon-upt"></span></th>
+
                                 <th onclick="sortTable('traffic')" class="sortable p-3 text-right">Traffic <span id="sort-icon-traffic"></span></th>
+
                             </tr>
+
                         </thead>
+
                         <tbody id="tableStoresBody" class="divide-y divide-slate-100 font-medium bg-white"></tbody>
+
                     </table>
+
                 </div>
+
             </section>
+
+
 
             <section class="grid grid-cols-1 lg:grid-cols-2 gap-5">
-                <div class="glass-card p-4 rounded-2xl shadow-sm space-y-3">
-                    <h4 class="text-sm font-bold text-slate-700 flex items-center gap-2">
-                        <i class="fa-solid fa-store text-indigo-600"></i> BREAKDOWN SALES CHANNEL
-                    </h4>
-                    <div class="h-56 relative"><canvas id="chartChannel"></canvas></div>
-                </div>
 
                 <div class="glass-card p-4 rounded-2xl shadow-sm space-y-3">
+
                     <h4 class="text-sm font-bold text-slate-700 flex items-center gap-2">
-                        <i class="fa-solid fa-layer-group text-sky-600"></i> BREAKDOWN PER DIVISI
+
+                        <i class="fa-solid fa-store text-indigo-600"></i> BREAKDOWN SALES CHANNEL
+
                     </h4>
-                    <div class="h-56 relative"><canvas id="chartDivisi"></canvas></div>
+
+                    <div class="h-56 relative"><canvas id="chartChannel"></canvas></div>
+
                 </div>
+
+
+
+                <div class="glass-card p-4 rounded-2xl shadow-sm space-y-3">
+
+                    <h4 class="text-sm font-bold text-slate-700 flex items-center gap-2">
+
+                        <i class="fa-solid fa-layer-group text-sky-600"></i> BREAKDOWN PER DIVISI
+
+                    </h4>
+
+                    <div class="h-56 relative"><canvas id="chartDivisi"></canvas></div>
+
+                </div>
+
             </section>
+
         </div>
+
+
 
         <!-- ================= PAGE 2: SALES BY DIVISION ================= -->
+
         <div id="page-sales-division" class="page-content hidden">
+
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 items-start">
+
                 <div class="space-y-4">
+
                     <div class="flex items-center justify-between border-b border-slate-200 pb-1.5">
+
                         <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
+
                             <i class="fa-solid fa-boxes-packing text-indigo-600"></i> BREAKDOWN KATEGORI (DP vs CV)
+
                         </h3>
+
                         <span class="text-[10px] text-slate-400">Sum = 100% Sales Toko</span>
+
                     </div>
 
+
+
                     <div class="grid grid-cols-2 gap-3">
+
                         <div class="glass-card p-3 rounded-xl border-t-4 border-t-indigo-600 space-y-2">
+
                             <div class="flex justify-between items-center">
+
                                 <span class="text-[9px] font-bold text-indigo-600 bg-indigo-50 px-1.5 py-0.5 rounded">DP</span>
+
                                 <i class="fa-solid fa-box text-xs text-indigo-500"></i>
+
                             </div>
+
                             <div>
+
                                 <p class="text-[10px] text-slate-400 font-medium">SALES DP</p>
+
                                 <h4 id="cardSalesDP" class="text-base font-extrabold text-slate-800 leading-tight">Rp 0</h4>
+
                             </div>
+
                             <div class="pt-1.5 border-t border-slate-100 text-[10px] space-y-0.5">
+
                                 <div class="flex justify-between"><span class="text-slate-400">Kontrib:</span><span id="cardKontribDP" class="font-bold text-indigo-600">0%</span></div>
+
                                 <div class="flex justify-between"><span class="text-slate-400">Grego YoY:</span><span id="cardGregoDP" class="font-semibold">0%</span></div>
+
                                 <div class="flex justify-between"><span class="text-slate-400">Fiscal YoY:</span><span id="cardFiscalDP" class="font-semibold">0%</span></div>
+
                             </div>
+
                         </div>
+
+
 
                         <div class="glass-card p-3 rounded-xl border-t-4 border-t-sky-500 space-y-2">
+
                             <div class="flex justify-between items-center">
+
                                 <span class="text-[9px] font-bold text-sky-600 bg-sky-50 px-1.5 py-0.5 rounded">CV</span>
+
                                 <i class="fa-solid fa-handshake text-xs text-sky-500"></i>
+
                             </div>
+
                             <div>
+
                                 <p class="text-[10px] text-slate-400 font-medium">SALES CV</p>
+
                                 <h4 id="cardSalesCV" class="text-base font-extrabold text-slate-800 leading-tight">Rp 0</h4>
+
                             </div>
+
                             <div class="pt-1.5 border-t border-slate-100 text-[10px] space-y-0.5">
+
                                 <div class="flex justify-between"><span class="text-slate-400">Kontrib:</span><span id="cardKontribCV" class="font-bold text-sky-600">0%</span></div>
+
                                 <div class="flex justify-between"><span class="text-slate-400">Grego YoY:</span><span id="cardGregoCV" class="font-semibold">0%</span></div>
+
                                 <div class="flex justify-between"><span class="text-slate-400">Fiscal YoY:</span><span id="cardFiscalCV" class="font-semibold">0%</span></div>
+
                             </div>
+
                         </div>
+
                     </div>
 
+
+
                     <div class="glass-card p-3 rounded-xl space-y-3">
+
                         <div class="flex justify-between text-[11px] font-bold">
+
                             <span class="text-indigo-600" id="labelProgressDP">DP: 0%</span>
+
                             <span class="text-sky-600" id="labelProgressCV">CV: 0%</span>
+
                         </div>
+
                         <div class="w-full bg-slate-100 rounded-full h-3 overflow-hidden flex shadow-inner">
+
                             <div id="barProgressDP" class="bg-indigo-600 h-full transition-all duration-500" style="width: 50%;"></div>
+
                             <div id="barProgressCV" class="bg-sky-400 h-full transition-all duration-500" style="width: 50%;"></div>
+
                         </div>
+
                         <div class="h-40 relative pt-1"><canvas id="chartDPCV"></canvas></div>
+
                     </div>
+
                 </div>
+
+
 
                 <div class="space-y-4">
+
                     <div class="flex items-center justify-between border-b border-slate-200 pb-1.5">
+
                         <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
+
                             <i class="fa-solid fa-layer-group text-emerald-600"></i> BREAKDOWN DIVISI (DIVISI 1 - 4)
+
                         </h3>
+
                         <span class="text-[10px] text-slate-400">Sum = 100% Sales Toko</span>
+
                     </div>
+
+
 
                     <div class="grid grid-cols-2 gap-3">
+
                         <div class="glass-card p-3 rounded-xl border-l-4 border-l-sky-500 space-y-1.5">
+
                             <div class="flex justify-between items-center"><span class="text-[10px] font-bold text-slate-700">DIVISI 1</span><i class="fa-solid fa-shirt text-xs text-sky-500"></i></div>
+
                             <p id="cardSalesDiv1" class="text-sm font-extrabold text-slate-800">Rp 0</p>
+
                             <p class="text-[10px] text-slate-500">Kontrib: <span id="cardKontribDiv1" class="font-bold text-sky-600">0%</span></p>
+
                             <div class="pt-1 border-t border-slate-100 text-[10px] space-y-0.5">
+
                                 <div class="flex justify-between"><span class="text-slate-400">Grego:</span><span id="cardGregoDiv1" class="font-semibold">0%</span></div>
+
                                 <div class="flex justify-between"><span class="text-slate-400">Fiscal:</span><span id="cardFiscalDiv1" class="font-semibold">0%</span></div>
+
                             </div>
+
                         </div>
+
+
 
                         <div class="glass-card p-3 rounded-xl border-l-4 border-l-indigo-500 space-y-1.5">
+
                             <div class="flex justify-between items-center"><span class="text-[10px] font-bold text-slate-700">DIVISI 2</span><i class="fa-solid fa-user-ninja text-xs text-indigo-500"></i></div>
+
                             <p id="cardSalesDiv2" class="text-sm font-extrabold text-slate-800">Rp 0</p>
+
                             <p class="text-[10px] text-slate-500">Kontrib: <span id="cardKontribDiv2" class="font-bold text-indigo-600">0%</span></p>
+
                             <div class="pt-1 border-t border-slate-100 text-[10px] space-y-0.5">
+
                                 <div class="flex justify-between"><span class="text-slate-400">Grego:</span><span id="cardGregoDiv2" class="font-semibold">0%</span></div>
+
                                 <div class="flex justify-between"><span class="text-slate-400">Fiscal:</span><span id="cardFiscalDiv2" class="font-semibold">0%</span></div>
+
                             </div>
+
                         </div>
+
+
 
                         <div class="glass-card p-3 rounded-xl border-l-4 border-l-emerald-500 space-y-1.5">
+
                             <div class="flex justify-between items-center"><span class="text-[10px] font-bold text-slate-700">DIVISI 3</span><i class="fa-solid fa-shoe-prints text-xs text-emerald-500"></i></div>
+
                             <p id="cardSalesDiv3" class="text-sm font-extrabold text-slate-800">Rp 0</p>
+
                             <p class="text-[10px] text-slate-500">Kontrib: <span id="cardKontribDiv3" class="font-bold text-emerald-600">0%</span></p>
+
                             <div class="pt-1 border-t border-slate-100 text-[10px] space-y-0.5">
+
                                 <div class="flex justify-between"><span class="text-slate-400">Grego:</span><span id="cardGregoDiv3" class="font-semibold">0%</span></div>
+
                                 <div class="flex justify-between"><span class="text-slate-400">Fiscal:</span><span id="cardFiscalDiv3" class="font-semibold">0%</span></div>
+
                             </div>
+
                         </div>
+
+
 
                         <div class="glass-card p-3 rounded-xl border-l-4 border-l-amber-500 space-y-1.5">
+
                             <div class="flex justify-between items-center"><span class="text-[10px] font-bold text-slate-700">DIVISI 4</span><i class="fa-solid fa-hat-cowboy text-xs text-amber-500"></i></div>
+
                             <p id="cardSalesDiv4" class="text-sm font-extrabold text-slate-800">Rp 0</p>
+
                             <p class="text-[10px] text-slate-500">Kontrib: <span id="cardKontribDiv4" class="font-bold text-amber-600">0%</span></p>
+
                             <div class="pt-1 border-t border-slate-100 text-[10px] space-y-0.5">
+
                                 <div class="flex justify-between"><span class="text-slate-400">Grego:</span><span id="cardGregoDiv4" class="font-semibold">0%</span></div>
+
                                 <div class="flex justify-between"><span class="text-slate-400">Fiscal:</span><span id="cardFiscalDiv4" class="font-semibold">0%</span></div>
+
                             </div>
+
                         </div>
+
                     </div>
+
+
 
                     <div class="glass-card p-3 rounded-xl space-y-3">
+
                         <div class="w-full bg-slate-100 rounded-full h-3 overflow-hidden flex shadow-inner">
+
                             <div id="barDiv1" class="bg-sky-500 h-full transition-all duration-500" style="width: 25%;"></div>
+
                             <div id="barDiv2" class="bg-indigo-600 h-full transition-all duration-500" style="width: 25%;"></div>
+
                             <div id="barDiv3" class="bg-emerald-500 h-full transition-all duration-500" style="width: 25%;"></div>
+
                             <div id="barDiv4" class="bg-amber-500 h-full transition-all duration-500" style="width: 25%;"></div>
+
                         </div>
+
                         <div class="grid grid-cols-4 gap-1 text-[10px] text-center">
+
                             <div class="text-slate-600" id="legendDiv1">Div 1: 0%</div>
+
                             <div class="text-slate-600" id="legendDiv2">Div 2: 0%</div>
+
                             <div class="text-slate-600" id="legendDiv3">Div 3: 0%</div>
+
                             <div class="text-slate-600" id="legendDiv4">Div 4: 0%</div>
+
                         </div>
+
                         <div class="h-40 relative pt-1"><canvas id="chartDivisiPage2"></canvas></div>
+
                     </div>
+
                 </div>
+
             </div>
+
         </div>
+
+
 
         <!-- ================= PAGE 3: SALES CHANNEL ================= -->
+
         <div id="page-sales-channel" class="page-content hidden space-y-5">
+
             <div class="grid grid-cols-1 md:grid-cols-3 gap-5 items-start">
+
                 <div class="glass-card p-4 rounded-2xl shadow-sm border-t-4 border-t-indigo-600 space-y-3">
+
                     <div class="flex justify-between items-start">
+
                         <div>
+
                             <span class="text-[9px] font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">1. IN STORE & SSSG</span>
+
                             <h3 class="text-sm font-bold text-slate-800 mt-1">SALES IN STORE</h3>
+
                         </div>
+
                         <div class="p-2 bg-indigo-50 text-indigo-600 rounded-xl text-base"><i class="fa-solid fa-building-store"></i></div>
+
                     </div>
+
                     <div class="grid grid-cols-2 gap-2">
+
                         <div><p class="text-[10px] text-slate-400 font-medium">SALES IN STORE</p><h4 id="cardSalesInStore" class="text-base font-extrabold text-slate-800">Rp 0</h4></div>
+
                         <div><p class="text-[10px] text-slate-400 font-medium">KONTRIBUSI</p><h4 id="cardKontribInStore" class="text-base font-extrabold text-indigo-600">0%</h4></div>
+
                     </div>
+
                     <div class="grid grid-cols-2 gap-2 pt-2 border-t border-slate-100 text-center">
+
                         <div class="bg-slate-50 p-2 rounded-xl"><p class="text-[9px] font-semibold text-slate-400 uppercase">SSSG Grego (YoY)</p><p id="cardSssgGrego" class="text-xs font-bold text-slate-700 mt-0.5">0%</p></div>
+
                         <div class="bg-slate-50 p-2 rounded-xl"><p class="text-[9px] font-semibold text-slate-400 uppercase">SSSG Fiscal (YoY)</p><p id="cardSssgFiscal" class="text-xs font-bold text-slate-700 mt-0.5">0%</p></div>
+
                     </div>
+
                 </div>
+
+
 
                 <div class="glass-card p-4 rounded-2xl shadow-sm border-t-4 border-t-amber-500 space-y-3">
+
                     <div class="flex justify-between items-start">
+
                         <div>
+
                             <span class="text-[9px] font-bold uppercase tracking-wider text-amber-600 bg-amber-50 px-2 py-0.5 rounded">2. BAZAAR</span>
+
                             <h3 class="text-sm font-bold text-slate-800 mt-1">PERFORMANCE BAZAAR</h3>
+
                         </div>
+
                         <div class="p-2 bg-amber-50 text-amber-600 rounded-xl text-base"><i class="fa-solid fa-store font-bold"></i></div>
+
                     </div>
+
                     <div class="grid grid-cols-2 gap-2">
+
                         <div><p class="text-[10px] text-slate-400 font-medium">SALES BAZAAR</p><h4 id="cardSalesBazaar" class="text-base font-extrabold text-slate-800">Rp 0</h4></div>
+
                         <div><p class="text-[10px] text-slate-400 font-medium">TARGET BAZAAR</p><h4 id="cardTargetBazaar" class="text-base font-extrabold text-slate-800">Rp 0</h4></div>
+
                     </div>
+
                     <div class="grid grid-cols-2 gap-2 pt-2 border-t border-slate-100 text-center">
+
                         <div class="bg-slate-50 p-2 rounded-xl"><p class="text-[9px] font-semibold text-slate-400 uppercase">Ach (%)</p><p id="cardAchBazaar" class="text-xs font-bold text-emerald-600 mt-0.5">0%</p></div>
+
                         <div class="bg-slate-50 p-2 rounded-xl"><p class="text-[9px] font-semibold text-slate-400 uppercase">Kontrib (%)</p><p id="cardKontribBazaar" class="text-xs font-bold text-amber-600 mt-0.5">0%</p></div>
+
                     </div>
+
                 </div>
+
+
 
                 <div class="glass-card p-4 rounded-2xl shadow-sm border-t-4 border-t-teal-500 space-y-3">
+
                     <div class="flex justify-between items-start">
+
                         <div>
+
                             <span class="text-[9px] font-bold uppercase tracking-wider text-teal-600 bg-teal-50 px-2 py-0.5 rounded">3. SHOP & TALK</span>
+
                             <h3 class="text-sm font-bold text-slate-800 mt-1">SHOP & TALK (SnT)</h3>
+
                         </div>
+
                         <div class="p-2 bg-teal-50 text-teal-600 rounded-xl text-base"><i class="fa-solid fa-headset"></i></div>
+
                     </div>
+
                     <div class="grid grid-cols-2 gap-2">
+
                         <div><p class="text-[10px] text-slate-400 font-medium">SALES SnT</p><h4 id="cardSalesShopTalk" class="text-base font-extrabold text-slate-800">Rp 0</h4></div>
+
                         <div><p class="text-[10px] text-slate-400 font-medium">TARGET SnT</p><h4 id="cardTargetShopTalk" class="text-base font-extrabold text-slate-800">Rp 0</h4></div>
+
                     </div>
+
                     <div class="grid grid-cols-4 gap-1.5 pt-2 border-t border-slate-100 text-center">
+
                         <div class="bg-slate-50 p-1.5 rounded-lg"><p class="text-[9px] font-semibold text-slate-400 uppercase">Ach</p><p id="cardAchShopTalk" class="text-xs font-bold text-emerald-600 mt-0.5">0%</p></div>
+
                         <div class="bg-slate-50 p-1.5 rounded-lg"><p class="text-[9px] font-semibold text-slate-400 uppercase">Kontrib</p><p id="cardKontribShopTalk" class="text-xs font-bold text-teal-600 mt-0.5">0%</p></div>
+
                         <div class="bg-slate-50 p-1.5 rounded-lg"><p class="text-[9px] font-semibold text-slate-400 uppercase">Grego</p><p id="cardGregoShopTalk" class="text-xs font-bold text-slate-700 mt-0.5">0%</p></div>
+
                         <div class="bg-slate-50 p-1.5 rounded-lg"><p class="text-[9px] font-semibold text-slate-400 uppercase">Fiscal</p><p id="cardFiscalShopTalk" class="text-xs font-bold text-slate-700 mt-0.5">0%</p></div>
+
                     </div>
+
                 </div>
+
             </div>
+
+
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-5 items-start">
+
                 <div class="glass-card p-4 rounded-2xl shadow-sm border-t-4 border-t-purple-600 space-y-3">
+
                     <div class="flex justify-between items-start">
+
                         <div>
+
                             <span class="text-[9px] font-bold uppercase tracking-wider text-purple-600 bg-purple-50 px-2 py-0.5 rounded">4. B2B</span>
+
                             <h3 class="text-sm font-bold text-slate-800 mt-1">BUSINESS TO BUSINESS</h3>
+
                         </div>
+
                         <div class="p-2 bg-purple-50 text-purple-600 rounded-xl text-base"><i class="fa-solid fa-briefcase"></i></div>
+
                     </div>
+
                     <div class="grid grid-cols-2 gap-2">
+
                         <div><p class="text-[10px] text-slate-400 font-medium">SALES B2B</p><h4 id="cardSalesB2B" class="text-base font-extrabold text-slate-800">Rp 0</h4></div>
+
                         <div><p class="text-[10px] text-slate-400 font-medium">TARGET B2B</p><h4 id="cardTargetB2B" class="text-base font-extrabold text-slate-800">Rp 0</h4></div>
+
                     </div>
+
                     <div class="grid grid-cols-4 gap-1.5 pt-2 border-t border-slate-100 text-center">
+
                         <div class="bg-slate-50 p-1.5 rounded-lg"><p class="text-[9px] font-semibold text-slate-400 uppercase">Ach</p><p id="cardAchB2B" class="text-xs font-bold text-emerald-600 mt-0.5">0%</p></div>
+
                         <div class="bg-slate-50 p-1.5 rounded-lg"><p class="text-[9px] font-semibold text-slate-400 uppercase">Kontrib</p><p id="cardKontribB2B" class="text-xs font-bold text-purple-600 mt-0.5">0%</p></div>
+
                         <div class="bg-slate-50 p-1.5 rounded-lg"><p class="text-[9px] font-semibold text-slate-400 uppercase">Grego</p><p id="cardGregoB2B" class="text-xs font-bold text-slate-700 mt-0.5">0%</p></div>
+
                         <div class="bg-slate-50 p-1.5 rounded-lg"><p class="text-[9px] font-semibold text-slate-400 uppercase">Fiscal</p><p id="cardFiscalB2B" class="text-xs font-bold text-slate-700 mt-0.5">0%</p></div>
+
                     </div>
+
                 </div>
+
+
 
                 <div class="glass-card p-4 rounded-2xl shadow-sm border-t-4 border-t-rose-500 space-y-3">
+
                     <div class="flex justify-between items-start">
+
                         <div>
+
                             <span class="text-[9px] font-bold uppercase tracking-wider text-rose-600 bg-rose-50 px-2 py-0.5 rounded">5. FFS</span>
+
                             <h3 class="text-sm font-bold text-slate-800 mt-1">FREE STANDING STORE</h3>
+
                         </div>
+
                         <div class="p-2 bg-rose-50 text-rose-600 rounded-xl text-base"><i class="fa-solid fa-shop-lock"></i></div>
+
                     </div>
+
                     <div class="grid grid-cols-2 gap-2">
+
                         <div><p class="text-[10px] text-slate-400 font-medium">SALES FFS</p><h4 id="cardSalesFFS" class="text-base font-extrabold text-slate-800">Rp 0</h4></div>
+
                         <div><p class="text-[10px] text-slate-400 font-medium">KONTRIBUSI FFS</p><h4 id="cardKontribFFS" class="text-base font-extrabold text-rose-600">0%</h4></div>
+
                     </div>
+
                     <div class="grid grid-cols-2 gap-2 pt-2 border-t border-slate-100 text-center">
+
                         <div class="bg-slate-50 p-2 rounded-xl"><p class="text-[9px] font-semibold text-slate-400 uppercase">Growth Grego (YoY)</p><p id="cardGregoFFS" class="text-xs font-bold text-slate-700 mt-0.5">0%</p></div>
+
                         <div class="bg-slate-50 p-2 rounded-xl"><p class="text-[9px] font-semibold text-slate-400 uppercase">Growth Fiscal (YoY)</p><p id="cardFiscalFFS" class="text-xs font-bold text-slate-700 mt-0.5">0%</p></div>
+
                     </div>
+
                 </div>
+
             </div>
 
+
+
             <div class="glass-card p-5 rounded-2xl shadow-sm space-y-3">
+
                 <div class="flex justify-between items-center border-b border-slate-200 pb-2">
+
                     <div>
+
                         <h4 class="text-sm font-bold text-slate-800 flex items-center gap-2">
+
                             <i class="fa-solid fa-chart-line text-teal-600"></i> TREND SALES SHOP & TALK (7 WEEKS TERAKHIR)
+
                         </h4>
+
                         <p class="text-[11px] text-slate-400 mt-0.5">Akumulasi penjualan fair berbasis Same-Day Cut-off sesuai hari pada tanggal filter</p>
+
                     </div>
+
                     <span class="text-xs bg-teal-50 text-teal-700 px-3 py-1 rounded-full font-medium"><i class="fa-solid fa-calendar-check mr-1"></i> Like-for-Like Day Cut-Off</span>
+
                 </div>
+
                 <div class="h-56 relative pt-2"><canvas id="chartTrendShopTalk"></canvas></div>
+
             </div>
+
+
 
             <div class="glass-card p-5 rounded-2xl shadow-sm space-y-4">
+
                 <div class="flex justify-between text-xs font-bold">
+
                     <span class="text-indigo-600" id="labelProgressInStore">Sales In Store: 0%</span>
+
                     <span class="text-amber-600" id="labelProgressBazaar">Bazaar: 0%</span>
+
                 </div>
+
                 <div class="w-full bg-slate-100 rounded-full h-4 overflow-hidden flex shadow-inner">
+
                     <div id="barProgressInStore" class="bg-indigo-600 h-full transition-all duration-500" style="width: 80%;"></div>
+
                     <div id="barProgressBazaar" class="bg-amber-500 h-full transition-all duration-500" style="width: 20%;"></div>
+
                 </div>
+
                 <div class="h-48 relative pt-2"><canvas id="chartSalesChannelPage"></canvas></div>
+
             </div>
+
         </div>
+
+
 
         <!-- ================= PAGE 4: NEW INITIATIVE BRAND (SUKO) ================= -->
+
         <div id="page-new-initiative" class="page-content hidden space-y-5">
+
             <div class="bg-gradient-to-r from-amber-500 to-indigo-600 text-white p-5 rounded-2xl shadow-md flex flex-col md:flex-row justify-between items-center gap-4">
+
                 <div class="flex items-center gap-4">
+
                     <div class="w-12 h-12 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center text-2xl font-black">
+
                         <i class="fa-solid fa-lightbulb text-amber-200"></i>
+
                     </div>
+
                     <div>
+
                         <h2 class="text-lg font-extrabold tracking-wide">SUKO BRAND PERFORMANCE INITIATIVE</h2>
+
                         <p class="text-xs text-amber-100">Monitoring & Analytics Brand SUKO (Kolom U Data Realtime)</p>
+
                     </div>
+
                 </div>
+
                 <div class="text-right bg-black/20 px-4 py-2 rounded-xl backdrop-blur-sm border border-white/10">
+
                     <p class="text-[10px] text-amber-200 uppercase font-semibold">Status Penetrasi Brand</p>
+
                     <p id="sukoActiveStoresSummary" class="text-sm font-bold">0 / 10 Toko Aktif</p>
+
                 </div>
+
             </div>
+
+
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+
                 <div class="glass-card p-4 rounded-2xl shadow-sm border-l-4 border-l-amber-500 space-y-2">
+
                     <div class="flex justify-between items-start">
+
                         <div>
+
                             <p class="text-[11px] font-semibold text-slate-500">TOTAL SALES SUKO</p>
+
                             <h3 id="sukoTotalSales" class="text-xl font-extrabold text-slate-800 mt-1">Rp 0</h3>
+
                         </div>
+
                         <div class="p-2 bg-amber-50 rounded-xl text-amber-600"><i class="fa-solid fa-tag"></i></div>
+
                     </div>
+
                     <div class="pt-1.5 border-t border-slate-100 text-[10px] flex justify-between">
+
                         <span class="text-slate-400">Rata-Rata / Hari:</span>
+
                         <span id="sukoDailyAvg" class="font-bold text-slate-700">Rp 0</span>
+
                     </div>
+
                 </div>
+
+
 
                 <div class="glass-card p-4 rounded-2xl shadow-sm border-l-4 border-l-indigo-600 space-y-2">
+
                     <div class="flex justify-between items-start">
+
                         <div>
+
                             <p class="text-[11px] font-semibold text-slate-500">KONTRIBUSI SUKO</p>
+
                             <h3 id="sukoKontribusi" class="text-xl font-extrabold text-indigo-600 mt-1">0%</h3>
+
                         </div>
+
                         <div class="p-2 bg-indigo-50 rounded-xl text-indigo-600"><i class="fa-solid fa-percent"></i></div>
+
                     </div>
+
                     <div class="pt-1.5 border-t border-slate-100 text-[10px] text-slate-500">Porsi SUKO terhadap Total Sales Toko</div>
+
                 </div>
+
+
 
                 <div class="glass-card p-4 rounded-2xl shadow-sm border-l-4 border-l-emerald-500 space-y-2">
+
                     <div class="flex justify-between items-start">
+
                         <div>
+
                             <p class="text-[11px] font-semibold text-slate-500">GROWTH GREGO (YoY)</p>
+
                             <h3 id="sukoGrowthGrego" class="text-xl font-extrabold text-slate-800 mt-1">0%</h3>
+
                         </div>
+
                         <div class="p-2 bg-emerald-50 rounded-xl text-emerald-600"><i class="fa-solid fa-arrow-trend-up"></i></div>
+
                     </div>
+
                     <div class="pt-1.5 border-t border-slate-100 text-[10px] text-slate-500">Perbandingan Kalender Gregorian (TY vs LY)</div>
+
                 </div>
+
+
 
                 <div class="glass-card p-4 rounded-2xl shadow-sm border-l-4 border-l-sky-500 space-y-2">
+
                     <div class="flex justify-between items-start">
+
                         <div>
+
                             <p class="text-[11px] font-semibold text-slate-500">GROWTH FISCAL (YoY)</p>
+
                             <h3 id="sukoGrowthFiscal" class="text-xl font-extrabold text-slate-800 mt-1">0%</h3>
+
                         </div>
+
                         <div class="p-2 bg-sky-50 rounded-xl text-sky-600"><i class="fa-solid fa-calendar-days"></i></div>
+
                     </div>
+
                     <div class="pt-1.5 border-t border-slate-100 text-[10px] text-slate-500">Perbandingan Kalender Operasional Fiscal</div>
+
                 </div>
+
             </div>
 
+
+
             <div class="glass-card p-5 rounded-2xl shadow-sm space-y-3">
+
                 <div class="flex justify-between items-center border-b border-slate-200 pb-2">
+
                     <div>
+
                         <h4 class="text-sm font-bold text-slate-800 flex items-center gap-2">
+
                             <i class="fa-solid fa-chart-line text-amber-500"></i> TREND SALES BRAND SUKO (7 WEEKS TERAKHIR)
+
                         </h4>
+
                         <p class="text-[11px] text-slate-400 mt-0.5">Pergerakan akumulasi penjualan mingguan SUKO berbasis Same-Day Cut-Off</p>
+
                     </div>
+
                     <span class="text-xs bg-amber-50 text-amber-700 px-3 py-1 rounded-full font-medium"><i class="fa-solid fa-fire mr-1"></i> Dynamic Weekly Trend</span>
+
                 </div>
+
                 <div class="h-60 relative pt-2"><canvas id="chartTrendSuko"></canvas></div>
+
             </div>
 
+
+
             <div class="glass-card p-5 rounded-2xl shadow-sm space-y-3">
+
                 <div class="flex justify-between items-center border-b border-slate-200 pb-2">
+
                     <h4 class="text-sm font-bold text-slate-800 flex items-center gap-2">
+
                         <i class="fa-solid fa-trophy text-amber-500"></i> RANKING PERFORMANCE SUKO PER TOKO KALIMANTAN
+
                     </h4>
+
                     <span class="text-xs text-slate-400">Diurutkan berdasarkan Sales SUKO Tertinggi</span>
+
                 </div>
+
+
 
                 <div class="overflow-x-auto rounded-xl border border-slate-200 shadow-inner">
+
                     <table class="w-full text-left text-xs text-slate-700 whitespace-nowrap">
+
                         <thead class="bg-slate-100 text-slate-600 font-semibold uppercase tracking-wider">
+
                             <tr>
+
                                 <th class="p-3 text-center w-12">Rank</th>
+
                                 <th class="p-3 sticky-col">Nama Toko</th>
+
                                 <th class="p-3 text-right">Sales SUKO</th>
+
                                 <th class="p-3 text-center">Kontribusi ke Toko (%)</th>
+
                                 <th class="p-3 text-center">Growth Grego (%)</th>
+
                                 <th class="p-3 text-center">Growth Fiscal (%)</th>
+
                             </tr>
+
                         </thead>
+
                         <tbody id="tableSukoBody" class="divide-y divide-slate-100 font-medium bg-white"></tbody>
+
                     </table>
+
                 </div>
+
             </div>
+
         </div>
+
+
 
         <!-- ================= PAGE 5: INDICATOR BUSINESS ================= -->
+
         <div id="page-indicator-business" class="page-content hidden space-y-5">
+
             <div>
+
                 <div class="flex items-center justify-between mb-3 border-b border-slate-200 pb-1">
+
                     <h3 class="text-xs font-bold text-indigo-900 uppercase tracking-wider flex items-center gap-1.5">
+
                         <i class="fa-solid fa-star text-amber-500"></i> CORE MANAGEMENT DRIVERS
+
                     </h3>
+
                     <span class="text-[10px] text-slate-400">Metrik Utama Pilihan Manajemen</span>
+
                 </div>
+
+
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
                     <div class="glass-card p-4 rounded-2xl shadow-sm border-t-4 border-t-indigo-600 space-y-2">
+
                         <div class="flex justify-between items-start">
+
                             <div>
+
                                 <span class="text-[9px] font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded uppercase">1. Core Volume</span>
+
                                 <p class="text-xs font-bold text-slate-700 mt-1">TOTAL TRANSAKSI (TRX)</p>
+
                             </div>
+
                             <div class="p-2 bg-indigo-50 text-indigo-600 rounded-xl text-base"><i class="fa-solid fa-receipt"></i></div>
+
                         </div>
+
                         <h3 id="indCardTrxVal" class="text-2xl font-black text-slate-800">0</h3>
+
                         <div class="grid grid-cols-2 gap-2 pt-2 border-t border-slate-100 text-center">
+
                             <div class="bg-slate-50 p-1.5 rounded-xl"><p class="text-[9px] font-semibold text-slate-400 uppercase">Grego YoY</p><p id="indCardTrxGrego" class="text-xs font-bold text-slate-700 mt-0.5">0%</p></div>
+
                             <div class="bg-slate-50 p-1.5 rounded-xl"><p class="text-[9px] font-semibold text-slate-400 uppercase">Fiscal YoY</p><p id="indCardTrxFiscal" class="text-xs font-bold text-slate-700 mt-0.5">0%</p></div>
+
                         </div>
+
                     </div>
+
+
 
                     <div class="glass-card p-4 rounded-2xl shadow-sm border-t-4 border-t-emerald-600 space-y-2">
+
                         <div class="flex justify-between items-start">
+
                             <div>
+
                                 <span class="text-[9px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded uppercase">2. Core Value</span>
+
                                 <p class="text-xs font-bold text-slate-700 mt-1">BASKET SIZE (AUC)</p>
+
                             </div>
+
                             <div class="p-2 bg-emerald-50 text-emerald-600 rounded-xl text-base"><i class="fa-solid fa-basket-shopping"></i></div>
+
                         </div>
+
                         <h3 id="indCardBasketVal" class="text-2xl font-black text-slate-800">Rp 0</h3>
+
                         <div class="grid grid-cols-2 gap-2 pt-2 border-t border-slate-100 text-center">
+
                             <div class="bg-slate-50 p-1.5 rounded-xl"><p class="text-[9px] font-semibold text-slate-400 uppercase">Grego YoY</p><p id="indCardBasketGrego" class="text-xs font-bold text-slate-700 mt-0.5">0%</p></div>
+
                             <div class="bg-slate-50 p-1.5 rounded-xl"><p class="text-[9px] font-semibold text-slate-400 uppercase">Fiscal YoY</p><p id="indCardBasketFiscal" class="text-xs font-bold text-slate-700 mt-0.5">0%</p></div>
+
                         </div>
+
                     </div>
+
+
 
                     <div class="glass-card p-4 rounded-2xl shadow-sm border-t-4 border-t-amber-500 space-y-2">
+
                         <div class="flex justify-between items-start">
+
                             <div>
+
                                 <span class="text-[9px] font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded uppercase">3. Core Productivity</span>
+
                                 <p class="text-xs font-bold text-slate-700 mt-1">UNIT PER TRANSAKSI (UPT)</p>
+
                             </div>
+
                             <div class="p-2 bg-amber-50 text-amber-600 rounded-xl text-base"><i class="fa-solid fa-boxes-stacked"></i></div>
+
                         </div>
+
                         <h3 id="indCardUptVal" class="text-2xl font-black text-slate-800">0</h3>
+
                         <div class="grid grid-cols-2 gap-2 pt-2 border-t border-slate-100 text-center">
+
                             <div class="bg-slate-50 p-1.5 rounded-xl"><p class="text-[9px] font-semibold text-slate-400 uppercase">Grego YoY</p><p id="indCardUptGrego" class="text-xs font-bold text-slate-700 mt-0.5">0%</p></div>
+
                             <div class="bg-slate-50 p-1.5 rounded-xl"><p class="text-[9px] font-semibold text-slate-400 uppercase">Fiscal YoY</p><p id="indCardUptFiscal" class="text-xs font-bold text-slate-700 mt-0.5">0%</p></div>
+
                         </div>
+
                     </div>
+
                 </div>
+
             </div>
+
+
 
             <div>
+
                 <div class="flex items-center justify-between mb-3 border-b border-slate-200 pb-1">
+
                     <h3 class="text-xs font-bold text-slate-600 uppercase tracking-wider flex items-center gap-1.5">
+
                         <i class="fa-solid fa-sliders text-sky-500"></i> SUPPORTING OPERATIONAL DRIVERS
+
                     </h3>
+
                     <span class="text-[10px] text-slate-400">Metrik Pendukung Operasional</span>
+
                 </div>
+
+
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+
                     <div class="glass-card p-3.5 rounded-xl shadow-sm border-l-4 border-l-sky-500 space-y-1.5">
+
                         <div class="flex justify-between items-center"><span class="text-[10px] font-bold text-slate-500">TRAFFIC</span><i class="fa-solid fa-users text-xs text-sky-500"></i></div>
+
                         <h4 id="indCardTrafficVal" class="text-lg font-bold text-slate-800">0</h4>
+
                         <div class="pt-1.5 border-t border-slate-100 text-[10px] space-y-0.5">
+
                             <div class="flex justify-between"><span class="text-slate-400">Grego:</span><span id="indCardTrafficGrego" class="font-bold">0%</span></div>
+
                             <div class="flex justify-between"><span class="text-slate-400">Fiscal:</span><span id="indCardTrafficFiscal" class="font-bold">0%</span></div>
+
                         </div>
+
                     </div>
+
+
 
                     <div class="glass-card p-3.5 rounded-xl shadow-sm border-l-4 border-l-teal-500 space-y-1.5">
+
                         <div class="flex justify-between items-center"><span class="text-[10px] font-bold text-slate-500">CONVERSION RATE</span><i class="fa-solid fa-filter-circle-dollar text-xs text-teal-500"></i></div>
+
                         <h4 id="indCardConvVal" class="text-lg font-bold text-teal-600">0%</h4>
+
                         <div class="pt-1.5 border-t border-slate-100 text-[10px] space-y-0.5">
+
                             <div class="flex justify-between"><span class="text-slate-400">Grego:</span><span id="indCardConvGrego" class="font-bold">0%</span></div>
+
                             <div class="flex justify-between"><span class="text-slate-400">Fiscal:</span><span id="indCardConvFiscal" class="font-bold">0%</span></div>
+
                         </div>
+
                     </div>
+
+
 
                     <div class="glass-card p-3.5 rounded-xl shadow-sm border-l-4 border-l-purple-500 space-y-1.5">
+
                         <div class="flex justify-between items-center"><span class="text-[10px] font-bold text-slate-500">TOTAL QTY</span><i class="fa-solid fa-cubes text-xs text-purple-500"></i></div>
+
                         <h4 id="indCardQtyVal" class="text-lg font-bold text-slate-800">0</h4>
+
                         <div class="pt-1.5 border-t border-slate-100 text-[10px] space-y-0.5">
+
                             <div class="flex justify-between"><span class="text-slate-400">Grego:</span><span id="indCardQtyGrego" class="font-bold">0%</span></div>
+
                             <div class="flex justify-between"><span class="text-slate-400">Fiscal:</span><span id="indCardQtyFiscal" class="font-bold">0%</span></div>
+
                         </div>
+
                     </div>
+
+
 
                     <div class="glass-card p-3.5 rounded-xl shadow-sm border-l-4 border-l-rose-500 space-y-1.5">
+
                         <div class="flex justify-between items-center"><span class="text-[10px] font-bold text-slate-500">AUR (AVG UNIT RETAIL)</span><i class="fa-solid fa-tag text-xs text-rose-500"></i></div>
+
                         <h4 id="indCardAurVal" class="text-lg font-bold text-slate-800">Rp 0</h4>
+
                         <div class="pt-1.5 border-t border-slate-100 text-[10px] space-y-0.5">
+
                             <div class="flex justify-between"><span class="text-slate-400">Grego:</span><span id="indCardAurGrego" class="font-bold">0%</span></div>
+
                             <div class="flex justify-between"><span class="text-slate-400">Fiscal:</span><span id="indCardAurFiscal" class="font-bold">0%</span></div>
+
                         </div>
+
                     </div>
+
                 </div>
+
             </div>
 
+
+
             <div class="glass-card p-5 rounded-2xl shadow-sm space-y-3">
+
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b border-slate-200 pb-3">
+
                     <div>
+
                         <h4 class="text-sm font-bold text-slate-800 flex items-center gap-2">
+
                             <i class="fa-solid fa-chart-line text-indigo-600"></i> TREND GROWTH INDIKATOR (7 WEEKS TERAKHIR)
+
                         </h4>
+
                         <p class="text-[11px] text-slate-400 mt-0.5">Pilih indikator untuk menampilkan pergerakan tren mingguan tunggal berbasis Same-Day Cut-Off</p>
+
                     </div>
+
+
 
                     <div class="flex items-center gap-2 bg-indigo-50 p-1.5 rounded-xl border border-indigo-100">
+
                         <label for="indicatorChartSelector" class="text-xs font-bold text-indigo-900 whitespace-nowrap pl-1">
+
                             <i class="fa-solid fa-sliders text-indigo-600 mr-1"></i> Pilih Indikator:
+
                         </label>
+
                         <select id="indicatorChartSelector" onchange="updateIndicatorTrendChart()" class="bg-white border border-indigo-200 text-indigo-950 font-bold text-xs rounded-lg p-1.5 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm cursor-pointer">
+
                             <option value="trx">1. Total Transaksi (TRX)</option>
+
                             <option value="basketSize">2. Basket Size (AUC)</option>
+
                             <option value="upt">3. Unit Per Transaksi (UPT)</option>
+
                             <option value="traffic">4. Traffic Pengunjung</option>
+
                             <option value="conversionRate">5. Conversion Rate (%)</option>
+
                             <option value="qty">6. Total Quantity (QTY)</option>
+
                             <option value="aur">7. Average Unit Retail (AUR)</option>
+
                         </select>
+
                     </div>
+
                 </div>
+
                 
+
                 <div class="h-64 relative pt-2"><canvas id="chartIndicatorTrend"></canvas></div>
+
             </div>
+
+
 
             <div class="glass-card p-5 rounded-2xl shadow-sm space-y-3">
+
                 <div class="flex justify-between items-center border-b border-slate-200 pb-2">
+
                     <h4 class="text-sm font-bold text-slate-800 flex items-center gap-2">
+
                         <i class="fa-solid fa-store text-indigo-600"></i> BREAKDOWN INDIKATOR BISNIS PER TOKO
+
                     </h4>
+
                     <span class="text-xs bg-indigo-50 text-indigo-700 px-3 py-1 rounded-full font-medium">
+
                         <i class="fa-solid fa-arrow-down-up-across-line mr-1"></i> Klik Judul Kolom untuk Sorting
+
                     </span>
+
                 </div>
 
+
+
                 <div class="overflow-x-auto rounded-xl border border-slate-200 shadow-inner">
+
                     <table class="w-full text-left text-xs text-slate-700 whitespace-nowrap">
+
                         <thead class="bg-slate-100 text-slate-600 font-semibold uppercase tracking-wider">
+
                             <tr>
+
                                 <th onclick="sortIndicatorTable('nama')" class="sortable sticky-col p-3 shadow-sm min-w-[180px]">Toko <span id="ind-sort-icon-nama"></span></th>
+
                                 <th onclick="sortIndicatorTable('trx')" class="sortable p-3 text-right bg-indigo-50/40">TRX <span id="ind-sort-icon-trx"></span></th>
+
                                 <th onclick="sortIndicatorTable('basketSize')" class="sortable p-3 text-right bg-emerald-50/40">Basket Size (AUC) <span id="ind-sort-icon-basketSize"></span></th>
+
                                 <th onclick="sortIndicatorTable('upt')" class="sortable p-3 text-right bg-amber-50/40">UPT <span id="ind-sort-icon-upt"></span></th>
+
                                 <th onclick="sortIndicatorTable('traffic')" class="sortable p-3 text-right">Traffic <span id="ind-sort-icon-traffic"></span></th>
+
                                 <th onclick="sortIndicatorTable('conversionRatePercent')" class="sortable p-3 text-center bg-teal-50/40">Conv Rate (%) <span id="ind-sort-icon-conversionRatePercent"></span></th>
+
                                 <th onclick="sortIndicatorTable('qty')" class="sortable p-3 text-right">QTY <span id="ind-sort-icon-qty"></span></th>
+
                                 <th onclick="sortIndicatorTable('aur')" class="sortable p-3 text-right">AUR <span id="ind-sort-icon-aur"></span></th>
+
                             </tr>
+
                         </thead>
+
                         <tbody id="tableIndicatorStoresBody" class="divide-y divide-slate-100 font-medium bg-white"></tbody>
+
                     </table>
+
                 </div>
+
             </div>
+
         </div>
+
+
 
     </main>
 
+
+
     <!-- JavaScript Application Script -->
+
     <script>
+
         const API_URL = "https://script.google.com/macros/s/AKfycbyDvQGuOFJVg9tQOUA_lQqL5e0t_Xdl0pDezExbhZ8Pq14zjnPYax1Baz-K6HHtbqM4/exec";
 
+
+
         let chartChannelInstance = null;
+
         let chartDivisiInstance = null;
+
         let chartDPCVInstance = null;
+
         let chartDivisiPage2Instance = null;
+
         let chartSalesChannelPageInstance = null;
+
         let chartTrendShopTalkInstance = null;
+
         let chartTrendSukoInstance = null;
+
         let chartIndicatorTrendInstance = null;
 
+
+
         let currentStoresData = [];
+
         let currentSortColumn = 'sales';
+
         let currentSortDirection = 'desc';
 
+
+
         let currentIndicatorStoresData = [];
+
         let currentIndicatorSortColumn = 'trx';
+
         let currentIndicatorSortDirection = 'desc';
+
+
 
         let globalIndicatorTrendData = [];
 
+
+
         window.addEventListener('DOMContentLoaded', () => {
+
             setMonthToDateRange();
+
             fetchDashboardData();
+
         });
+
+
 
         function switchTab(tabName) {
+
             document.querySelectorAll('.page-content').forEach(el => el.classList.add('hidden'));
+
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
 
+
+
             document.getElementById(`page-${tabName}`).classList.remove('hidden');
+
             document.getElementById(`tab-${tabName}`).classList.add('active');
+
         }
+
+
 
         function setMonthToDateRange() {
+
             const today = new Date();
+
             const yyyy = today.getFullYear();
+
             const mm = String(today.getMonth() + 1).padStart(2, '0');
+
             const dd = String(today.getDate()).padStart(2, '0');
 
+
+
             document.getElementById('startDate').value = `${yyyy}-${mm}-01`;
+
             document.getElementById('endDate').value = `${yyyy}-${mm}-${dd}`;
+
         }
 
+
+
         document.getElementById('filterForm').addEventListener('submit', (e) => {
+
             e.preventDefault();
+
             fetchDashboardData();
+
         });
 
+
+
         async function fetchDashboardData() {
+
             const kodeToko = document.getElementById('kodeToko').value;
+
             const startDate = document.getElementById('startDate').value;
+
             const endDate = document.getElementById('endDate').value;
+
+
 
             showLoading(true);
 
+
+
             try {
+
                 const queryUrl = `${API_URL}?kodeToko=${encodeURIComponent(kodeToko)}&startDate=${startDate}&endDate=${endDate}&refreshCache=true`;
+
                 const response = await fetch(queryUrl);
+
                 const data = await response.json();
 
+
+
                 if (data.status === "success") {
+
                     renderDashboard(data);
+
                     document.getElementById('lastUpdated').innerText = `Terakhir diperbarui: ${new Date().toLocaleTimeString('id-ID')}`;
+
                 } else {
+
                     alert("Gagal mengambil data: " + data.message);
+
                 }
+
             } catch (error) {
+
                 console.error("Error fetching dashboard data:", error);
+
                 alert("Terjadi kesalahan koneksi saat memanggil data dari Apps Script.");
+
             } finally {
+
                 showLoading(false);
+
             }
+
         }
 
+
+
         function renderDashboard(data) {
+
             const sum = data.summary;
+
             const ch = data.breakdownChannel;
+
             const div = data.breakdownDivisi;
+
             const cat = data.salesCategoryDetail || { dp: {}, cv: {} };
+
             const divDetail = data.salesDivisionDetail || { divisi1: {}, divisi2: {}, divisi3: {}, divisi4: {} };
+
             const chDetail = data.salesChannelDetail || { bazaar: {}, inStore: {}, shopTalk: {}, b2b: {}, ffs: {} };
+
             const suko = data.sukoDetail || { sales: 0, kontribusiPercent: 0, growthGregoPercent: 0, growthFiscalPercent: 0, dailyAverageSales: 0, activeStoresCount: 0, storesRanking: [], trend7Weeks: [] };
+
             const indDetail = data.indicatorBusinessDetail || { trend7Weeks: [], storesPerformance: [] };
 
+
+
             const rawStores = data.breakdownStores || [];
+
             currentStoresData = rawStores.map(st => ({
+
                 ...st,
+
                 basketSize: st.trx > 0 ? Math.round(st.sales / st.trx) : 0,
+
                 aur: st.qty > 0 ? Math.round(st.sales / st.qty) : 0,
+
                 upt: st.trx > 0 ? Math.round((st.qty / st.trx) * 100) / 100 : 0
+
             }));
 
+
+
             currentIndicatorStoresData = [...(indDetail.storesPerformance || [])];
+
             globalIndicatorTrendData = indDetail.trend7Weeks || [];
+
+
 
             const selectedKodeToko = document.getElementById('kodeToko').value;
 
-            // PAGE 1
+
+
+            // PAGE 1: KPI Summary
+
             document.getElementById('cardTotalSales').innerText = formatRupiah(sum.totalSales);
+
             document.getElementById('cardTotalTarget').innerText = formatRupiah(sum.totalTarget);
+
             document.getElementById('cardAchievement').innerText = `${sum.achievementPercent}%`;
+
             document.getElementById('cardKontribusi').innerText = `${sum.kontribusiSalesPercent}%`;
 
+
+
             setGrowthBadge('cardGrowthGrego', sum.growthGregoYoYPercent);
+
             setGrowthBadge('cardGrowthFiscal', sum.growthFiscalYoYPercent);
 
+
+
+            // LOGIKA HALAMAN 1: OPSI 2 vs OPSI 3 HANDLING
+
+            const thVarGrego = document.getElementById('th-varGrego');
+
+            const thVarFiscal = document.getElementById('th-varFiscal');
+
+            const tooltipBox = document.getElementById('p1-kpi-tooltip');
+
+
+
+            if (selectedKodeToko === "ALL") {
+
+                // OPSI 2 ON: Tampilkan Kolom Nominal Rp di Tabel Breakdown Toko
+
+                if (thVarGrego) thVarGrego.classList.remove('hidden');
+
+                if (thVarFiscal) thVarFiscal.classList.remove('hidden');
+
+
+
+                // OPSI 3 OFF: Sembunyikan Hover Tooltip Single Store
+
+                if (tooltipBox) tooltipBox.classList.add('hidden');
+
+            } else {
+
+                // OPSI 2 OFF: Sembunyikan Kolom Nominal Rp di Tabel Breakdown Toko
+
+                if (thVarGrego) thVarGrego.classList.add('hidden');
+
+                if (thVarFiscal) thVarFiscal.classList.add('hidden');
+
+
+
+                // OPSI 3 ON: Tampilkan & Isi Data Hover Tooltip Single Store
+
+                if (tooltipBox) {
+
+                    tooltipBox.classList.remove('hidden');
+
+
+
+                    const diffGrego = sum.diffGregoYoYAmount || 0;
+
+                    const diffFiscal = sum.diffFiscalYoYAmount || 0;
+
+
+
+                    const elemGrego = document.getElementById('tooltip-diffGrego');
+
+                    const elemFiscal = document.getElementById('tooltip-diffFiscal');
+
+
+
+                    if (elemGrego) {
+
+                        elemGrego.innerText = formatVarianceRupiah(diffGrego);
+
+                        elemGrego.className = diffGrego >= 0 ? "font-bold text-emerald-400" : "font-bold text-rose-400";
+
+                    }
+
+
+
+                    if (elemFiscal) {
+
+                        elemFiscal.innerText = formatVarianceRupiah(diffFiscal);
+
+                        elemFiscal.className = diffFiscal >= 0 ? "font-bold text-emerald-400" : "font-bold text-rose-400";
+
+                    }
+
+                }
+
+            }
+
+
+
             document.getElementById('cardTrx').innerText = sum.trx.value.toLocaleString('id-ID');
+
             setGrowthBadge('trxGrego', sum.trx.growthGrego);
+
             setGrowthBadge('trxFiscal', sum.trx.growthFiscal);
 
+
+
             document.getElementById('cardQty').innerText = sum.qty.value.toLocaleString('id-ID');
+
             setGrowthBadge('qtyGrego', sum.qty.growthGrego);
+
             setGrowthBadge('qtyFiscal', sum.qty.growthFiscal);
 
+
+
             document.getElementById('cardTraffic').innerText = sum.traffic.value.toLocaleString('id-ID');
+
             setGrowthBadge('trafficGrego', sum.traffic.growthGrego);
+
             setGrowthBadge('trafficFiscal', sum.traffic.growthFiscal);
 
+
+
             document.getElementById('cardBasketSize').innerText = formatRupiah(sum.basketSize.value);
+
             setGrowthBadge('basketSizeGrego', sum.basketSize.growthGrego);
+
             setGrowthBadge('basketSizeFiscal', sum.basketSize.growthFiscal);
 
+
+
             document.getElementById('cardAUR').innerText = formatRupiah(sum.aur.value);
+
             setGrowthBadge('aurGrego', sum.aur.growthGrego);
+
             setGrowthBadge('aurFiscal', sum.aur.growthFiscal);
 
+
+
             document.getElementById('cardUPT').innerText = sum.upt.value;
+
             setGrowthBadge('uptGrego', sum.upt.growthGrego);
+
             setGrowthBadge('uptFiscal', sum.upt.growthFiscal);
 
+
+
             renderStoresPanel(selectedKodeToko);
+
             renderChannelChart(ch);
+
             renderDivisiChart(div);
 
+
+
             // PAGE 2
+
             renderSalesCategoryPage(cat);
+
             renderSalesDivisionPage(divDetail);
 
+
+
             // PAGE 3
+
             renderSalesChannelPage(chDetail);
 
+
+
             // PAGE 4
+
             renderSukoPage(suko);
 
+
+
             // PAGE 5
+
             renderIndicatorBusinessPage(sum, indDetail);
+
         }
+
+
 
         // PAGE 5 LOGIC
+
         function renderIndicatorBusinessPage(sum, indDetail) {
+
             document.getElementById('indCardTrxVal').innerText = sum.trx.value.toLocaleString('id-ID');
+
             setGrowthBadge('indCardTrxGrego', sum.trx.growthGrego);
+
             setGrowthBadge('indCardTrxFiscal', sum.trx.growthFiscal);
 
+
+
             document.getElementById('indCardBasketVal').innerText = formatRupiah(sum.basketSize.value);
+
             setGrowthBadge('indCardBasketGrego', sum.basketSize.growthGrego);
+
             setGrowthBadge('indCardBasketFiscal', sum.basketSize.growthFiscal);
 
+
+
             document.getElementById('indCardUptVal').innerText = sum.upt.value;
+
             setGrowthBadge('indCardUptGrego', sum.upt.growthGrego);
+
             setGrowthBadge('indCardUptFiscal', sum.upt.growthFiscal);
 
+
+
             document.getElementById('indCardTrafficVal').innerText = sum.traffic.value.toLocaleString('id-ID');
+
             setGrowthBadge('indCardTrafficGrego', sum.traffic.growthGrego);
+
             setGrowthBadge('indCardTrafficFiscal', sum.traffic.growthFiscal);
 
+
+
             const convRateVal = sum.conversionRate ? sum.conversionRate.value : 0;
+
             const convGrego = sum.conversionRate ? sum.conversionRate.growthGrego : 0;
+
             const convFiscal = sum.conversionRate ? sum.conversionRate.growthFiscal : 0;
 
+
+
             document.getElementById('indCardConvVal').innerText = `${convRateVal}%`;
+
             setGrowthBadge('indCardConvGrego', convGrego);
+
             setGrowthBadge('indCardConvFiscal', convFiscal);
 
+
+
             document.getElementById('indCardQtyVal').innerText = sum.qty.value.toLocaleString('id-ID');
+
             setGrowthBadge('indCardQtyGrego', sum.qty.growthGrego);
+
             setGrowthBadge('indCardQtyFiscal', sum.qty.growthFiscal);
 
+
+
             document.getElementById('indCardAurVal').innerText = formatRupiah(sum.aur.value);
+
             setGrowthBadge('indCardAurGrego', sum.aur.growthGrego);
+
             setGrowthBadge('indCardAurFiscal', sum.aur.growthFiscal);
 
+
+
             updateIndicatorTrendChart();
+
             renderIndicatorStoresTable();
+
         }
 
+
+
         function updateIndicatorTrendChart() {
+
             const selectedMetric = document.getElementById('indicatorChartSelector').value;
+
             const ctx = document.getElementById('chartIndicatorTrend').getContext('2d');
+
+
 
             if (chartIndicatorTrendInstance) chartIndicatorTrendInstance.destroy();
 
+
+
             const labels = globalIndicatorTrendData.map(item => item.weekLabel);
+
             const values = globalIndicatorTrendData.map(item => item[selectedMetric] || 0);
 
+
+
             const metricConfig = {
+
                 trx: { label: 'Total Transaksi (TRX)', color: '#4f46e5', bg: 'rgba(79, 70, 229, 0.15)', isCurrency: false, suffix: '' },
+
                 basketSize: { label: 'Basket Size / AUC (Rp)', color: '#059669', bg: 'rgba(5, 150, 105, 0.15)', isCurrency: true, suffix: '' },
+
                 upt: { label: 'Unit Per Transaksi (UPT)', color: '#d97706', bg: 'rgba(217, 119, 6, 0.15)', isCurrency: false, suffix: '' },
+
                 traffic: { label: 'Traffic Pengunjung', color: '#0284c7', bg: 'rgba(2, 132, 199, 0.15)', isCurrency: false, suffix: '' },
+
                 conversionRate: { label: 'Conversion Rate (%)', color: '#0d9488', bg: 'rgba(13, 148, 136, 0.15)', isCurrency: false, suffix: '%' },
+
                 qty: { label: 'Total Quantity (QTY)', color: '#9333ea', bg: 'rgba(147, 51, 234, 0.15)', isCurrency: false, suffix: '' },
+
                 aur: { label: 'Average Unit Retail / AUR (Rp)', color: '#e11d48', bg: 'rgba(225, 29, 72, 0.15)', isCurrency: true, suffix: '' }
+
             };
+
+
 
             const cfg = metricConfig[selectedMetric] || metricConfig.trx;
 
+
+
             chartIndicatorTrendInstance = new Chart(ctx, {
+
                 type: 'line',
+
                 data: {
+
                     labels: labels,
+
                     datasets: [{
+
                         label: cfg.label,
+
                         data: values,
+
                         borderColor: cfg.color,
+
                         backgroundColor: cfg.bg,
+
                         fill: true,
+
                         tension: 0.3,
+
                         pointBackgroundColor: cfg.color,
+
                         pointRadius: 5
+
                     }]
+
                 },
+
                 options: {
+
                     responsive: true,
+
                     maintainAspectRatio: false,
+
                     plugins: { legend: { display: false } },
+
                     scales: {
+
                         y: {
+
                             ticks: {
+
                                 callback: function(val) {
+
                                     if (cfg.isCurrency) return 'Rp ' + (val >= 1e6 ? (val / 1e6).toFixed(1) + 'M' : val.toLocaleString('id-ID'));
+
                                     return val.toLocaleString('id-ID') + cfg.suffix;
+
                                 }
+
                             }
+
                         }
+
                     }
+
                 }
+
             });
+
         }
+
+
 
         function sortIndicatorTable(columnName) {
+
             if (currentIndicatorSortColumn === columnName) {
+
                 currentIndicatorSortDirection = currentIndicatorSortDirection === 'asc' ? 'desc' : 'asc';
+
             } else {
+
                 currentIndicatorSortColumn = columnName;
+
                 currentIndicatorSortDirection = 'desc';
+
             }
+
+
 
             currentIndicatorStoresData.sort((a, b) => {
+
                 let valA = a[columnName];
+
                 let valB = b[columnName];
 
+
+
                 if (typeof valA === 'string') {
+
                     valA = valA.toLowerCase();
+
                     valB = valB.toLowerCase();
+
                 }
+
+
 
                 if (valA < valB) return currentIndicatorSortDirection === 'asc' ? -1 : 1;
+
                 if (valA > valB) return currentIndicatorSortDirection === 'asc' ? 1 : -1;
+
                 return 0;
+
             });
+
+
 
             renderIndicatorStoresTable();
+
         }
+
+
 
         function updateIndicatorSortIcons() {
+
             const columns = ['nama', 'trx', 'basketSize', 'upt', 'traffic', 'conversionRatePercent', 'qty', 'aur'];
+
             columns.forEach(col => {
+
                 const iconContainer = document.getElementById(`ind-sort-icon-${col}`);
+
                 if (!iconContainer) return;
+
+
 
                 if (col === currentIndicatorSortColumn) {
+
                     const arrowIcon = currentIndicatorSortDirection === 'asc' ? 'fa-arrow-up' : 'fa-arrow-down';
+
                     iconContainer.innerHTML = `<i class="fa-solid ${arrowIcon} text-indigo-600 ml-1"></i>`;
+
                 } else {
+
                     iconContainer.innerHTML = '';
+
                 }
+
             });
+
         }
+
+
 
         function renderIndicatorStoresTable() {
+
             const tbody = document.getElementById('tableIndicatorStoresBody');
+
             tbody.innerHTML = "";
+
+
 
             if (!currentIndicatorStoresData || currentIndicatorStoresData.length === 0) {
+
                 tbody.innerHTML = `<tr><td colspan="8" class="p-4 text-center text-slate-400">Tidak ada data indikator bisnis toko.</td></tr>`;
+
                 return;
+
             }
+
+
 
             currentIndicatorStoresData.forEach(st => {
+
                 const tr = document.createElement('tr');
+
                 tr.className = "hover:bg-slate-50 transition border-b border-slate-100";
 
+
+
                 tr.innerHTML = `
+
                     <td class="p-3 font-semibold text-slate-800 sticky-col">${st.nama} <span class="text-[10px] text-slate-400">(${st.kode})</span></td>
+
                     <td class="p-3 text-right font-bold text-slate-800 bg-indigo-50/20">${st.trx.toLocaleString('id-ID')}</td>
+
                     <td class="p-3 text-right font-bold text-emerald-700 bg-emerald-50/20">${formatRupiah(st.basketSize)}</td>
+
                     <td class="p-3 text-right font-bold text-amber-700 bg-amber-50/20">${st.upt}</td>
+
                     <td class="p-3 text-right text-slate-600">${st.traffic.toLocaleString('id-ID')}</td>
+
                     <td class="p-3 text-center font-bold text-teal-600 bg-teal-50/20">${st.conversionRatePercent}%</td>
+
                     <td class="p-3 text-right text-slate-600">${st.qty.toLocaleString('id-ID')}</td>
+
                     <td class="p-3 text-right font-semibold text-slate-700">${formatRupiah(st.aur)}</td>
+
                 `;
+
                 tbody.appendChild(tr);
+
             });
+
+
 
             updateIndicatorSortIcons();
+
         }
+
+
 
         // HELPER RENDERERS
+
         function renderSalesCategoryPage(cat) {
+
             const dp = cat.dp || { sales: 0, kontribusiPercent: 0, growthGregoPercent: 0, growthFiscalPercent: 0 };
+
             const cv = cat.cv || { sales: 0, kontribusiPercent: 0, growthGregoPercent: 0, growthFiscalPercent: 0 };
 
+
+
             document.getElementById('cardSalesDP').innerText = formatRupiah(dp.sales);
+
             document.getElementById('cardKontribDP').innerText = `${dp.kontribusiPercent}%`;
+
             setGrowthBadge('cardGregoDP', dp.growthGregoPercent);
+
             setGrowthBadge('cardFiscalDP', dp.growthFiscalPercent);
 
+
+
             document.getElementById('cardSalesCV').innerText = formatRupiah(cv.sales);
+
             document.getElementById('cardKontribCV').innerText = `${cv.kontribusiPercent}%`;
+
             setGrowthBadge('cardGregoCV', cv.growthGregoPercent);
+
             setGrowthBadge('cardFiscalCV', cv.growthFiscalPercent);
 
+
+
             document.getElementById('labelProgressDP').innerText = `DP: ${dp.kontribusiPercent}%`;
+
             document.getElementById('labelProgressCV').innerText = `CV: ${cv.kontribusiPercent}%`;
+
             document.getElementById('barProgressDP').style.width = `${dp.kontribusiPercent}%`;
+
             document.getElementById('barProgressCV').style.width = `${cv.kontribusiPercent}%`;
 
+
+
             renderDPCVChart(dp.sales, cv.sales);
+
         }
+
+
 
         function renderSalesDivisionPage(divDetail) {
+
             const d1 = divDetail.divisi1 || { sales: 0, kontribusiPercent: 0, growthGregoPercent: 0, growthFiscalPercent: 0 };
+
             const d2 = divDetail.divisi2 || { sales: 0, kontribusiPercent: 0, growthGregoPercent: 0, growthFiscalPercent: 0 };
+
             const d3 = divDetail.divisi3 || { sales: 0, kontribusiPercent: 0, growthGregoPercent: 0, growthFiscalPercent: 0 };
+
             const d4 = divDetail.divisi4 || { sales: 0, kontribusiPercent: 0, growthGregoPercent: 0, growthFiscalPercent: 0 };
 
+
+
             document.getElementById('cardSalesDiv1').innerText = formatRupiah(d1.sales);
+
             document.getElementById('cardKontribDiv1').innerText = `${d1.kontribusiPercent}%`;
+
             setGrowthBadge('cardGregoDiv1', d1.growthGregoPercent);
+
             setGrowthBadge('cardFiscalDiv1', d1.growthFiscalPercent);
 
+
+
             document.getElementById('cardSalesDiv2').innerText = formatRupiah(d2.sales);
+
             document.getElementById('cardKontribDiv2').innerText = `${d2.kontribusiPercent}%`;
+
             setGrowthBadge('cardGregoDiv2', d2.growthGregoPercent);
+
             setGrowthBadge('cardFiscalDiv2', d2.growthFiscalPercent);
 
+
+
             document.getElementById('cardSalesDiv3').innerText = formatRupiah(d3.sales);
+
             document.getElementById('cardKontribDiv3').innerText = `${d3.kontribusiPercent}%`;
+
             setGrowthBadge('cardGregoDiv3', d3.growthGregoPercent);
+
             setGrowthBadge('cardFiscalDiv3', d3.growthFiscalPercent);
 
+
+
             document.getElementById('cardSalesDiv4').innerText = formatRupiah(d4.sales);
+
             document.getElementById('cardKontribDiv4').innerText = `${d4.kontribusiPercent}%`;
+
             setGrowthBadge('cardGregoDiv4', d4.growthGregoPercent);
+
             setGrowthBadge('cardFiscalDiv4', d4.growthFiscalPercent);
 
+
+
             document.getElementById('barDiv1').style.width = `${d1.kontribusiPercent}%`;
+
             document.getElementById('barDiv2').style.width = `${d2.kontribusiPercent}%`;
+
             document.getElementById('barDiv3').style.width = `${d3.kontribusiPercent}%`;
+
             document.getElementById('barDiv4').style.width = `${d4.kontribusiPercent}%`;
 
+
+
             document.getElementById('legendDiv1').innerText = `Div 1: ${d1.kontribusiPercent}%`;
+
             document.getElementById('legendDiv2').innerText = `Div 2: ${d2.kontribusiPercent}%`;
+
             document.getElementById('legendDiv3').innerText = `Div 3: ${d3.kontribusiPercent}%`;
+
             document.getElementById('legendDiv4').innerText = `Div 4: ${d4.kontribusiPercent}%`;
 
+
+
             renderDivisiPage2Chart(d1.sales, d2.sales, d3.sales, d4.sales);
+
         }
+
+
 
         function renderSalesChannelPage(chDetail) {
+
             const baz = chDetail.bazaar || { sales: 0, target: 0, achievementPercent: 0, kontribusiPercent: 0 };
+
             const ins = chDetail.inStore || { sales: 0, kontribusiPercent: 0, sssgGregoPercent: 0, sssgFiscalPercent: 0 };
+
             const snt = chDetail.shopTalk || { sales: 0, target: 0, achievementPercent: 0, kontribusiPercent: 0, growthGregoPercent: 0, growthFiscalPercent: 0, trend7Weeks: [] };
+
             const b2b = chDetail.b2b || { sales: 0, target: 0, achievementPercent: 0, kontribusiPercent: 0, growthGregoPercent: 0, growthFiscalPercent: 0 };
+
             const ffs = chDetail.ffs || { sales: 0, kontribusiPercent: 0, growthGregoPercent: 0, growthFiscalPercent: 0 };
 
+
+
             document.getElementById('cardSalesInStore').innerText = formatRupiah(ins.sales);
+
             document.getElementById('cardKontribInStore').innerText = `${ins.kontribusiPercent}%`;
+
             setGrowthBadge('cardSssgGrego', ins.sssgGregoPercent);
+
             setGrowthBadge('cardSssgFiscal', ins.sssgFiscalPercent);
 
+
+
             document.getElementById('cardSalesBazaar').innerText = formatRupiah(baz.sales);
+
             document.getElementById('cardTargetBazaar').innerText = formatRupiah(baz.target);
+
             document.getElementById('cardAchBazaar').innerText = `${baz.achievementPercent}%`;
+
             document.getElementById('cardKontribBazaar').innerText = `${baz.kontribusiPercent}%`;
 
+
+
             document.getElementById('cardSalesShopTalk').innerText = formatRupiah(snt.sales);
+
             document.getElementById('cardTargetShopTalk').innerText = formatRupiah(snt.target);
+
             document.getElementById('cardAchShopTalk').innerText = `${snt.achievementPercent}%`;
+
             document.getElementById('cardKontribShopTalk').innerText = `${snt.kontribusiPercent}%`;
+
             setGrowthBadge('cardGregoShopTalk', snt.growthGregoPercent);
+
             setGrowthBadge('cardFiscalShopTalk', snt.growthFiscalPercent);
 
+
+
             document.getElementById('cardSalesB2B').innerText = formatRupiah(b2b.sales);
+
             document.getElementById('cardTargetB2B').innerText = formatRupiah(b2b.target);
+
             document.getElementById('cardAchB2B').innerText = `${b2b.achievementPercent}%`;
+
             document.getElementById('cardKontribB2B').innerText = `${b2b.kontribusiPercent}%`;
+
             setGrowthBadge('cardGregoB2B', b2b.growthGregoPercent);
+
             setGrowthBadge('cardFiscalB2B', b2b.growthFiscalPercent);
 
+
+
             document.getElementById('cardSalesFFS').innerText = formatRupiah(ffs.sales);
+
             document.getElementById('cardKontribFFS').innerText = `${ffs.kontribusiPercent}%`;
+
             setGrowthBadge('cardGregoFFS', ffs.growthGregoPercent);
+
             setGrowthBadge('cardFiscalFFS', ffs.growthFiscalPercent);
 
+
+
             document.getElementById('labelProgressInStore').innerText = `Sales In Store: ${ins.kontribusiPercent}%`;
+
             document.getElementById('labelProgressBazaar').innerText = `Bazaar: ${baz.kontribusiPercent}%`;
+
             document.getElementById('barProgressInStore').style.width = `${ins.kontribusiPercent}%`;
+
             document.getElementById('barProgressBazaar').style.width = `${baz.kontribusiPercent}%`;
 
+
+
             renderTrendShopTalkChart(snt.trend7Weeks);
+
             renderSalesChannelPageChart(ins.sales, baz.sales);
+
         }
+
+
 
         function renderSukoPage(suko) {
+
             document.getElementById('sukoTotalSales').innerText = formatRupiah(suko.sales);
+
             document.getElementById('sukoKontribusi').innerText = `${suko.kontribusiPercent}%`;
+
             document.getElementById('sukoDailyAvg').innerText = formatRupiah(suko.dailyAverageSales);
+
             document.getElementById('sukoActiveStoresSummary').innerText = `${suko.activeStoresCount} / 10 Toko Aktif`;
 
+
+
             setGrowthBadge('sukoGrowthGrego', suko.growthGregoPercent);
+
             setGrowthBadge('sukoGrowthFiscal', suko.growthFiscalPercent);
 
+
+
             renderTrendSukoChart(suko.trend7Weeks || []);
+
             renderSukoStoresRankingTable(suko.storesRanking || []);
+
         }
+
+
 
         function renderTrendSukoChart(trendData) {
+
             const ctx = document.getElementById('chartTrendSuko').getContext('2d');
+
             if (chartTrendSukoInstance) chartTrendSukoInstance.destroy();
 
+
+
             chartTrendSukoInstance = new Chart(ctx, {
+
                 type: 'line',
+
                 data: {
+
                     labels: trendData.map(item => item.weekLabel),
+
                     datasets: [{
+
                         label: 'Sales SUKO (Rp)',
+
                         data: trendData.map(item => item.sales),
+
                         borderColor: '#f59e0b',
+
                         backgroundColor: 'rgba(245, 158, 11, 0.15)',
+
                         fill: true,
+
                         tension: 0.3,
+
                         pointBackgroundColor: '#f59e0b',
+
                         pointRadius: 5
+
                     }]
+
                 },
+
                 options: {
+
                     responsive: true,
+
                     maintainAspectRatio: false,
+
                     plugins: { legend: { display: false } },
+
                     scales: { y: { ticks: { callback: (val) => 'Rp ' + (val / 1e6).toFixed(1) + 'M' } } }
+
                 }
+
             });
+
         }
+
+
 
         function renderSukoStoresRankingTable(rankingData) {
+
             const tbody = document.getElementById('tableSukoBody');
+
             tbody.innerHTML = "";
+
+
 
             if (!rankingData || rankingData.length === 0) {
+
                 tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-slate-400">Tidak ada data penjualan SUKO.</td></tr>`;
+
                 return;
+
             }
+
+
 
             rankingData.forEach((st, idx) => {
+
                 const tr = document.createElement('tr');
+
                 tr.className = "hover:bg-slate-50 transition border-b border-slate-100";
+
+
 
                 let rankBadge = `<span class="font-bold text-slate-500">${idx + 1}</span>`;
+
                 if (idx === 0) rankBadge = `<span class="bg-amber-100 text-amber-700 font-black px-2 py-0.5 rounded-full text-[10px]"><i class="fa-solid fa-crown mr-1"></i>1</span>`;
+
                 else if (idx === 1) rankBadge = `<span class="bg-slate-200 text-slate-700 font-bold px-2 py-0.5 rounded-full text-[10px]">2</span>`;
+
                 else if (idx === 2) rankBadge = `<span class="bg-amber-800/10 text-amber-800 font-bold px-2 py-0.5 rounded-full text-[10px]">3</span>`;
 
+
+
                 tr.innerHTML = `
+
                     <td class="p-3 text-center">${rankBadge}</td>
+
                     <td class="p-3 font-semibold text-slate-800 sticky-col">${st.nama} <span class="text-[10px] text-slate-400">(${st.kode})</span></td>
+
                     <td class="p-3 text-right font-extrabold text-amber-600">${formatRupiah(st.sukoSales)}</td>
+
                     <td class="p-3 text-center font-bold text-indigo-600">${st.sukoKontribusiPercent}%</td>
+
                     <td class="p-3 text-center ${st.sukoGrowthGregoPercent >= 0 ? 'text-emerald-600 font-semibold' : 'text-rose-600 font-semibold'}">${st.sukoGrowthGregoPercent >= 0 ? '+' : ''}${st.sukoGrowthGregoPercent}%</td>
+
                     <td class="p-3 text-center ${st.sukoGrowthFiscalPercent >= 0 ? 'text-emerald-600 font-semibold' : 'text-rose-600 font-semibold'}">${st.sukoGrowthFiscalPercent >= 0 ? '+' : ''}${st.sukoGrowthFiscalPercent}%</td>
+
                 `;
+
                 tbody.appendChild(tr);
+
             });
+
         }
+
+
 
         function renderTrendShopTalkChart(trendData) {
+
             const ctx = document.getElementById('chartTrendShopTalk').getContext('2d');
+
             if (chartTrendShopTalkInstance) chartTrendShopTalkInstance.destroy();
 
+
+
             chartTrendShopTalkInstance = new Chart(ctx, {
+
                 type: 'line',
+
                 data: {
+
                     labels: trendData.map(item => item.weekLabel),
+
                     datasets: [{
+
                         label: 'Sales Shop & Talk (Rp)',
+
                         data: trendData.map(item => item.sales),
+
                         borderColor: '#0d9488',
+
                         backgroundColor: 'rgba(13, 148, 136, 0.1)',
+
                         fill: true,
+
                         tension: 0.3,
+
                         pointBackgroundColor: '#0d9488',
+
                         pointRadius: 4
+
                     }]
+
                 },
+
                 options: {
+
                     responsive: true,
+
                     maintainAspectRatio: false,
+
                     plugins: { legend: { display: false } },
+
                     scales: { y: { ticks: { callback: (val) => 'Rp ' + (val / 1e6).toFixed(1) + 'M' } } }
+
                 }
+
             });
+
         }
+
+
 
         function renderDPCVChart(dpSales, cvSales) {
+
             const ctx = document.getElementById('chartDPCV').getContext('2d');
+
             if (chartDPCVInstance) chartDPCVInstance.destroy();
 
+
+
             chartDPCVInstance = new Chart(ctx, {
+
                 type: 'doughnut',
+
                 data: {
+
                     labels: ['Direct Purchase (DP)', 'Consignment Vendor (CV)'],
+
                     datasets: [{ data: [dpSales, cvSales], backgroundColor: ['#4f46e5', '#38bdf8'] }]
+
                 },
+
                 options: {
+
                     responsive: true,
+
                     maintainAspectRatio: false,
+
                     plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } } }
+
                 }
+
             });
+
         }
+
+
 
         function renderDivisiPage2Chart(d1Sales, d2Sales, d3Sales, d4Sales) {
+
             const ctx = document.getElementById('chartDivisiPage2').getContext('2d');
+
             if (chartDivisiPage2Instance) chartDivisiPage2Instance.destroy();
 
+
+
             chartDivisiPage2Instance = new Chart(ctx, {
+
                 type: 'doughnut',
+
                 data: {
+
                     labels: ['Divisi 1', 'Divisi 2', 'Divisi 3', 'Divisi 4'],
+
                     datasets: [{ data: [d1Sales, d2Sales, d3Sales, d4Sales], backgroundColor: ['#0284c7', '#4f46e5', '#10b981', '#f59e0b'] }]
+
                 },
+
                 options: {
+
                     responsive: true,
+
                     maintainAspectRatio: false,
+
                     plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } } }
+
                 }
+
             });
+
         }
+
+
 
         function renderSalesChannelPageChart(inStoreSales, bazaarSales) {
+
             const ctx = document.getElementById('chartSalesChannelPage').getContext('2d');
+
             if (chartSalesChannelPageInstance) chartSalesChannelPageInstance.destroy();
 
+
+
             chartSalesChannelPageInstance = new Chart(ctx, {
+
                 type: 'doughnut',
+
                 data: {
+
                     labels: ['Sales In Store', 'Bazaar'],
+
                     datasets: [{ data: [inStoreSales, bazaarSales], backgroundColor: ['#4f46e5', '#f59e0b'] }]
+
                 },
+
                 options: {
+
                     responsive: true,
+
                     maintainAspectRatio: false,
+
                     plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } } }
+
                 }
+
             });
+
         }
+
+
 
         function sortTable(columnName) {
+
             if (currentSortColumn === columnName) {
+
                 currentSortDirection = currentSortDirection === 'asc' ? 'desc' : 'asc';
+
             } else {
+
                 currentSortColumn = columnName;
+
                 currentSortDirection = 'desc';
+
             }
+
+
 
             currentStoresData.sort((a, b) => {
+
                 let valA = a[columnName];
+
                 let valB = b[columnName];
 
+
+
                 if (typeof valA === 'string') {
+
                     valA = valA.toLowerCase();
+
                     valB = valB.toLowerCase();
+
                 }
+
+
 
                 if (valA < valB) return currentSortDirection === 'asc' ? -1 : 1;
+
                 if (valA > valB) return currentSortDirection === 'asc' ? 1 : -1;
+
                 return 0;
+
             });
+
+
 
             const selectedKodeToko = document.getElementById('kodeToko').value;
+
             renderStoresPanel(selectedKodeToko);
+
         }
+
+
 
         function updateSortIcons() {
-            const columns = ['nama', 'sales', 'target', 'achievementPercent', 'kontribusiPercent', 'growthGregoPercent', 'growthFiscalPercent', 'trx', 'qty', 'basketSize', 'aur', 'upt', 'traffic'];
+
+            const columns = ['nama', 'sales', 'target', 'achievementPercent', 'kontribusiPercent', 'growthGregoPercent', 'diffGregoYoYAmount', 'growthFiscalPercent', 'diffFiscalYoYAmount', 'trx', 'qty', 'basketSize', 'aur', 'upt', 'traffic'];
+
             columns.forEach(col => {
+
                 const iconContainer = document.getElementById(`sort-icon-${col}`);
+
                 if (!iconContainer) return;
 
+
+
                 if (col === currentSortColumn) {
+
                     const arrowIcon = currentSortDirection === 'asc' ? 'fa-arrow-up' : 'fa-arrow-down';
+
                     iconContainer.innerHTML = `<i class="fa-solid ${arrowIcon} text-indigo-600 ml-1"></i>`;
+
                 } else {
+
                     iconContainer.innerHTML = '';
+
                 }
+
             });
+
         }
+
+
 
         function renderStoresPanel(selectedKodeToko) {
+
             const panel = document.getElementById('panelAllStores');
+
             const tbody = document.getElementById('tableStoresBody');
 
+
+
             if (selectedKodeToko !== "ALL") {
+
                 panel.classList.add('hidden');
+
                 return;
+
             }
+
+
 
             panel.classList.remove('hidden');
+
             tbody.innerHTML = "";
 
+
+
             if (!currentStoresData || currentStoresData.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="13" class="p-4 text-center text-slate-400">Tidak ada data toko.</td></tr>`;
+
+                tbody.innerHTML = `<tr><td colspan="15" class="p-4 text-center text-slate-400">Tidak ada data toko.</td></tr>`;
+
                 return;
+
             }
+
+
 
             currentStoresData.forEach(st => {
+
                 const tr = document.createElement('tr');
+
                 tr.className = "hover:bg-slate-50 transition border-b border-slate-100";
 
+
+
+                const diffGregoVal = st.diffGregoYoYAmount || 0;
+
+                const diffFiscalVal = st.diffFiscalYoYAmount || 0;
+
+
+
                 tr.innerHTML = `
+
                     <td class="p-3 font-semibold text-slate-800 sticky-col">${st.nama} <span class="text-[10px] text-slate-400">(${st.kode})</span></td>
+
                     <td class="p-3 text-right font-bold text-slate-800">${formatRupiah(st.sales)}</td>
+
                     <td class="p-3 text-right text-slate-500">${formatRupiah(st.target)}</td>
+
                     <td class="p-3 text-center ${st.achievementPercent >= 100 ? 'text-emerald-600 font-bold' : 'text-slate-700'}">${st.achievementPercent}%</td>
+
                     <td class="p-3 text-center text-indigo-600 font-semibold">${st.kontribusiPercent}%</td>
+
                     <td class="p-3 text-center ${st.growthGregoPercent >= 0 ? 'text-emerald-600 font-semibold' : 'text-rose-600 font-semibold'}">${st.growthGregoPercent >= 0 ? '+' : ''}${st.growthGregoPercent}%</td>
+
+                    
+
+                    <!-- OPSI 2: VALUE VARIANCE GREGO (RP) -->
+
+                    <td class="p-3 text-right font-bold bg-indigo-50/30 ${diffGregoVal >= 0 ? 'text-emerald-600' : 'text-rose-600'}">${formatVarianceRupiah(diffGregoVal)}</td>
+
+
+
                     <td class="p-3 text-center ${st.growthFiscalPercent >= 0 ? 'text-emerald-600 font-semibold' : 'text-rose-600 font-semibold'}">${st.growthFiscalPercent >= 0 ? '+' : ''}${st.growthFiscalPercent}%</td>
+
+                    
+
+                    <!-- OPSI 2: VALUE VARIANCE FISCAL (RP) -->
+
+                    <td class="p-3 text-right font-bold bg-indigo-50/30 ${diffFiscalVal >= 0 ? 'text-emerald-600' : 'text-rose-600'}">${formatVarianceRupiah(diffFiscalVal)}</td>
+
+
+
                     <td class="p-3 text-right text-slate-600">${st.trx.toLocaleString('id-ID')}</td>
+
                     <td class="p-3 text-right text-slate-600">${st.qty.toLocaleString('id-ID')}</td>
+
                     <td class="p-3 text-right font-semibold text-indigo-900 bg-indigo-50/30">${formatRupiah(st.basketSize)}</td>
+
                     <td class="p-3 text-right font-semibold text-indigo-900 bg-indigo-50/30">${formatRupiah(st.aur)}</td>
+
                     <td class="p-3 text-right font-semibold text-indigo-900 bg-indigo-50/30">${st.upt}</td>
+
                     <td class="p-3 text-right text-slate-600">${st.traffic.toLocaleString('id-ID')}</td>
+
                 `;
+
                 tbody.appendChild(tr);
+
             });
+
+
 
             updateSortIcons();
+
         }
+
+
 
         function setGrowthBadge(elementId, value) {
+
             const el = document.getElementById(elementId);
+
             if (!el) return;
 
+
+
             const fontClasses = Array.from(el.classList).filter(c => c.startsWith('text-[') || c.startsWith('text-'));
+
             const sizeClass = fontClasses.length > 0 ? fontClasses.join(' ') : 'text-xs';
 
+
+
             if (value > 0) {
+
                 el.className = `${sizeClass} font-bold text-emerald-600`;
+
                 el.innerText = `+${value}%`;
+
             } else if (value < 0) {
+
                 el.className = `${sizeClass} font-bold text-rose-600`;
+
                 el.innerText = `${value}%`;
+
             } else {
+
                 el.className = `${sizeClass} font-bold text-slate-700`;
+
                 el.innerText = `0%`;
+
             }
+
         }
+
+
 
         function renderChannelChart(ch) {
+
             const ctx = document.getElementById('chartChannel').getContext('2d');
+
             if (chartChannelInstance) chartChannelInstance.destroy();
 
+
+
             chartChannelInstance = new Chart(ctx, {
+
                 type: 'bar',
+
                 data: {
+
                     labels: ['DP', 'CV', 'Bazaar', 'Shop&Talk', 'FFS', 'SUKO', 'B2B'],
+
                     datasets: [{
+
                         label: 'Sales (Rp)',
+
                         data: [ch.dp, ch.cv, ch.bazaar, ch.shopAndTalk, ch.ffs, ch.suko, ch.b2b],
+
                         backgroundColor: '#4f46e5',
+
                         borderRadius: 8
+
                     }]
+
                 },
+
                 options: {
+
                     responsive: true,
+
                     maintainAspectRatio: false,
+
                     plugins: { legend: { display: false } },
+
                     scales: { y: { ticks: { callback: (val) => 'Rp ' + (val / 1e6).toFixed(0) + 'M' } } }
+
                 }
+
             });
+
         }
+
+
 
         function renderDivisiChart(div) {
+
             const ctx = document.getElementById('chartDivisi').getContext('2d');
+
             if (chartDivisiInstance) chartDivisiInstance.destroy();
 
+
+
             chartDivisiInstance = new Chart(ctx, {
+
                 type: 'doughnut',
+
                 data: {
+
                     labels: ['Divisi 1', 'Divisi 2', 'Divisi 3', 'Divisi 4'],
+
                     datasets: [{ data: [div.divisi1, div.divisi2, div.divisi3, div.divisi4], backgroundColor: ['#0284c7', '#38bdf8', '#818cf8', '#c084fc'] }]
+
                 },
+
                 options: {
+
                     responsive: true,
+
                     maintainAspectRatio: false,
+
                     plugins: { legend: { position: 'bottom' } }
+
                 }
+
             });
+
         }
+
+
 
         function formatRupiah(number) {
+
             return new Intl.NumberFormat('id-ID', {
+
                 style: 'currency',
+
                 currency: 'IDR',
+
                 maximumFractionDigits: 0
-            }).format(number);
+
+            }).format(number || 0);
+
         }
+
+
+
+        function formatVarianceRupiah(val) {
+
+            const num = Number(val || 0);
+
+            if (num > 0) return "+Rp " + Math.round(num).toLocaleString('id-ID') + " (Saving)";
+
+            if (num < 0) return "-Rp " + Math.round(Math.abs(num)).toLocaleString('id-ID') + " (Hutang Sales)";
+
+            return "Rp 0";
+
+        }
+
+
 
         function showLoading(isLoading) {
+
             const loading = document.getElementById('loadingState');
+
             const activePage = document.querySelector('.page-content:not(.hidden)');
+
             const btn = document.getElementById('btnFilter');
 
+
+
             if (isLoading) {
+
                 loading.classList.remove('hidden');
+
                 if (activePage) activePage.classList.add('opacity-40', 'pointer-events-none');
+
                 btn.disabled = true;
+
             } else {
+
                 loading.classList.add('hidden');
+
                 if (activePage) activePage.classList.remove('opacity-40', 'pointer-events-none');
+
                 btn.disabled = false;
+
             }
+
         }
+
     </script>
+
 </body>
+
 </html>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audit Kelengkapan Data Input Toko - Regional Kalimantan</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+    <!-- Header / Navbar Sederhana -->
+    <header class="bg-indigo-900 text-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <div class="bg-indigo-800 p-2.5 rounded-xl border border-indigo-700 shadow-inner">
+                    <i class="fa-solid fa-clipboard-check text-amber-400 text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold tracking-wide">AUDIT KELENGKAPAN INPUT HARIAN</h1>
+                    <p class="text-xs text-indigo-200">Monitoring Real-Time Kolom SALES (10 Toko Regional Kalimantan)</p>
+                </div>
+            </div>
+
+            <!-- Kontrol Tahun & Tombol Navigasi Lain -->
+            <div class="flex items-center gap-3">
+                <div class="flex items-center bg-indigo-950 px-3 py-1.5 rounded-lg border border-indigo-700 text-sm">
+                    <span class="text-indigo-300 text-xs mr-2 font-medium">Tahun:</span>
+                    <select id="yearSelect" onchange="loadAuditData()" class="bg-transparent text-white font-bold focus:outline-none cursor-pointer">
+                        <option value="2026" selected>2026</option>
+                        <option value="2025">2025</option>
+                    </select>
+                </div>
+                <a href="index.html" class="px-3 py-1.5 bg-indigo-800 hover:bg-indigo-700 text-white text-xs font-semibold rounded-lg transition border border-indigo-600 flex items-center gap-1.5 shadow-sm">
+                    <i class="fa-solid fa-chart-line"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="entry.html" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold rounded-lg transition border border-emerald-500 flex items-center gap-1.5 shadow-sm">
+                    <i class="fa-solid fa-plus-circle"></i>
+                    <span>Form Entry</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-[98%] w-full mx-auto px-2 py-6">
+        
+        <!-- Info Legend & Status Bar -->
+        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 mb-6 flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center gap-6 text-xs font-medium">
+                <div class="flex items-center gap-2">
+                    <span class="w-3 h-3 rounded-full bg-emerald-500 inline-block shadow-sm"></span>
+                    <span class="text-slate-600"><strong>DONE</strong> (Semua Tanggal Terisi Penuh)</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="w-3 h-3 rounded-full bg-rose-500 inline-block shadow-sm"></span>
+                    <span class="text-slate-600"><strong>MISSING</strong> (Ada Tanggal Belum Diisi / Klik untuk Input)</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="w-3 h-3 rounded-full bg-slate-300 inline-block shadow-sm"></span>
+                    <span class="text-slate-500"><strong>FUTURE</strong> (Belum Berjalan)</span>
+                </div>
+            </div>
+
+            <div id="loadingStatus" class="text-xs text-indigo-600 font-semibold flex items-center gap-2">
+                <i class="fa-solid fa-circle-notch fa-spin"></i> Menghubungkan ke Spreadsheet...
+            </div>
+        </div>
+
+        <!-- Tabel Matriks Horizontal -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse whitespace-nowrap">
+                    <thead>
+                        <tr class="bg-slate-100 text-slate-700 text-xs font-bold uppercase tracking-wider border-b border-slate-200">
+                            <th class="py-3.5 px-4 sticky left-0 bg-slate-100 z-10 border-r border-slate-200 shadow-sm w-36">Kode Toko</th>
+                            <th class="py-3.5 px-4 sticky left-36 bg-slate-100 z-10 border-r border-slate-200 shadow-sm min-w-[180px]">Nama Toko</th>
+                            <th class="py-3.5 px-3 text-center border-r border-slate-200">Jan</th>
+                            <th class="py-3.5 px-3 text-center border-r border-slate-200">Feb</th>
+                            <th class="py-3.5 px-3 text-center border-r border-slate-200">Mar</th>
+                            <th class="py-3.5 px-3 text-center border-r border-slate-200">Apr</th>
+                            <th class="py-3.5 px-3 text-center border-r border-slate-200">Mei</th>
+                            <th class="py-3.5 px-3 text-center border-r border-slate-200">Jun</th>
+                            <th class="py-3.5 px-3 text-center border-r border-slate-200">Jul</th>
+                            <th class="py-3.5 px-3 text-center border-r border-slate-200">Ags</th>
+                            <th class="py-3.5 px-3 text-center border-r border-slate-200">Sep</th>
+                            <th class="py-3.5 px-3 text-center border-r border-slate-200">Okt</th>
+                            <th class="py-3.5 px-3 text-center border-r border-slate-200">Nov</th>
+                            <th class="py-3.5 px-3 text-center">Des</th>
+                        </tr>
+                    </thead>
+                    <tbody id="auditTableBody" class="divide-y divide-slate-100 text-xs">
+                        <!-- Data akan dirender secara dinamis via JavaScript -->
+                        <tr>
+                            <td colspan="14" class="text-center py-8 text-slate-400 font-medium">Memuat data matriks audit...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-center py-4 text-slate-400 text-xs border-t border-slate-200 mt-auto">
+        &copy; 2026 Regional Kalimantan &bull; Sistem Audit Kelengkapan Data Harian Toko
+    </footer>
+
+    <!-- JavaScript Logika & Rendering -->
+    <script>
+        // URL Web App Google Apps Script yang baru
+        const API_URL = "https://script.google.com/macros/s/AKfycbyDvQGuOFJVg9tQOUA_lQqL5e0t_Xdl0pDezExbhZ8Pq14zjnPYax1Baz-K6HHtbqM4/exec";
+
+        document.addEventListener("DOMContentLoaded", () => {
+            loadAuditData();
+        });
+
+        async function loadAuditData() {
+            const year = document.getElementById("yearSelect").value;
+            const statusEl = document.getElementById("loadingStatus");
+            const tbody = document.getElementById("auditTableBody");
+
+            statusEl.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> Memuat audit tahun ${year}...`;
+            tbody.innerHTML = `<tr><td colspan="14" class="text-center py-10 text-slate-400 font-medium"><i class="fa-solid fa-spinner fa-spin text-indigo-600 mr-2"></i> Mengambil data dari spreadsheet...</td></tr>`;
+
+            try {
+                const response = await fetch(`${API_URL}?action=getAuditStatus&year=${year}`);
+                const result = await response.json();
+
+                if (result.status === "success") {
+                    renderAuditTable(result.data);
+                    statusEl.innerHTML = `<span class="text-emerald-600"><i class="fa-solid fa-check-circle"></i> Data Ter-update</span>`;
+                } else {
+                    throw new Error(result.message || "Gagal mengambil data audit.");
+                }
+            } catch (err) {
+                console.error(err);
+                statusEl.innerHTML = `<span class="text-rose-600"><i class="fa-solid fa-triangle-exclamation"></i> Gagal Memuat Data</span>`;
+                tbody.innerHTML = `<tr><td colspan="14" class="text-center py-8 text-rose-500 font-medium">Gagal terhubung ke backend: ${err.message}</td></tr>`;
+            }
+        }
+
+        function renderAuditTable(dataList) {
+            const tbody = document.getElementById("auditTableBody");
+            tbody.innerHTML = "";
+
+            if (!dataList || dataList.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="14" class="text-center py-8 text-slate-400">Tidak ada data toko yang ditemukan.</td></tr>`;
+                return;
+            }
+
+            dataList.forEach(store => {
+                let tr = document.createElement("tr");
+                tr.className = "hover:bg-slate-50/80 transition-colors";
+
+                let html = `
+                    <td class="py-3 px-4 font-bold text-slate-900 sticky left-0 bg-white border-r border-slate-200 shadow-sm">
+                        <span class="px-2 py-1 bg-indigo-50 text-indigo-700 rounded border border-indigo-100">${store.kode}</span>
+                    </td>
+                    <td class="py-3 px-4 font-medium text-slate-700 sticky left-36 bg-white border-r border-slate-200 shadow-sm">
+                        ${store.nama}
+                    </td>
+                `;
+                tr.innerHTML = html;
+
+                for (let m = 1; m <= 12; m++) {
+                    const mKey = `m${m}`;
+                    const mData = store.months[mKey] || { status: "FUTURE", label: "-", missingDates: [] };
+
+                    let badgeClass = "";
+                    let cellContent = "";
+
+                    if (mData.status === "DONE") {
+                        badgeClass = "bg-emerald-50 text-emerald-700 border border-emerald-200 font-semibold";
+                        cellContent = `<i class="fa-solid fa-check text-emerald-600 mr-1"></i> DONE`;
+                        
+                        tr.innerHTML += `
+                            <td class="py-3 px-2 text-center border-r border-slate-100">
+                                <span class="inline-block px-2 py-1 rounded text-[11px] ${badgeClass}">
+                                    ${cellContent}
+                                </span>
+                            </td>
+                        `;
+                    } else if (mData.status === "MISSING") {
+                        badgeClass = "bg-rose-50 text-rose-700 border border-rose-200 font-bold hover:bg-rose-100 cursor-pointer shadow-xs animate-pulse";
+                        const targetDate = mData.missingDates.length > 0 ? mData.missingDates[0] : "";
+                        cellContent = `<i class="fa-solid fa-triangle-exclamation text-rose-500 mr-1"></i> ${mData.label}`;
+                        
+                        tr.innerHTML += `
+                            <td class="py-3 px-2 text-center border-r border-slate-100">
+                                <span onclick="redirectToEntry('${store.kode}', '${targetDate}')" class="inline-block px-2 py-1 rounded text-[11px] ${badgeClass}" title="Klik untuk langsung isi data ke entry.html">
+                                    ${cellContent}
+                                </span>
+                            </td>
+                        `;
+                    } else {
+                        badgeClass = "text-slate-400 bg-slate-50 border border-slate-100";
+                        cellContent = `-`;
+
+                        tr.innerHTML += `
+                            <td class="py-3 px-2 text-center border-r border-slate-100">
+                                <span class="inline-block px-2 py-1 rounded text-[11px] ${badgeClass}">
+                                    ${cellContent}
+                                </span>
+                            </td>
+                        `;
+                    }
+                }
+
+                tbody.appendChild(tr);
+            });
+        }
+
+        function redirectToEntry(kodeToko, tanggal) {
+            if (!tanggal) {
+                window.location.href = `entry.html?toko=${kodeToko}`;
+                return;
+            }
+            window.location.href = `entry.html?toko=${kodeToko}&tanggal=${tanggal}`;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Form Daily Sales Entry - Regional Kalimantan</title>
+    
+    <!-- PWA Metadata -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#312e81">
+    <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+
+    <!-- Tailwind CSS CDN & FontAwesome Icons -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-slate-100 font-sans text-slate-800 min-h-screen flex flex-col justify-between antialiased selection:bg-indigo-500 selection:text-white">
+
+    <!-- Header / Navbar -->
+    <header class="bg-indigo-900 text-white shadow-md sticky top-0 z-50">
+        <div class="max-w-3xl mx-auto px-4 py-3.5 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-amber-400 text-indigo-950 flex items-center justify-center font-bold text-lg shadow">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </div>
+                <div>
+                    <h1 class="text-base font-bold leading-tight">FORM DAILY SALES ENTRY</h1>
+                    <p class="text-xs text-indigo-200">Input Data Realisasi Sales & Operasional Toko</p>
+                </div>
+            </div>
+            <a href="index.html" class="px-3 py-1.5 rounded-lg bg-indigo-800/80 hover:bg-indigo-700 text-xs font-semibold text-indigo-100 border border-indigo-700 transition flex items-center gap-1.5">
+                <i class="fa-solid fa-chart-line"></i> Dashboard
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Container Form -->
+    <main class="max-w-3xl w-full mx-auto px-4 py-6 flex-1 space-y-6">
+
+        <form id="formEntry" onsubmit="submitDailySales(event)" class="bg-white rounded-2xl border border-slate-200 shadow-xl overflow-hidden p-5 sm:p-7 space-y-6">
+            
+            <!-- Alert Notifikasi Status -->
+            <div id="alertBox" class="hidden p-4 rounded-xl text-xs font-medium border flex items-center justify-between gap-3 transition">
+                <div class="flex items-center gap-2">
+                    <i id="alertIcon" class="text-base"></i>
+                    <span id="alertMessage"></span>
+                </div>
+                <button type="button" onclick="hideAlert()" class="text-slate-400 hover:text-slate-600 font-bold">
+                    <i class="fa-solid fa-xmark text-sm"></i>
+                </button>
+            </div>
+
+            <!-- SECTION 1: HEADER PARAMETER (TOKO & TANGGAL) -->
+            <div class="bg-indigo-50/70 rounded-xl p-4 border border-indigo-100 space-y-3">
+                <h3 class="text-xs font-extrabold text-indigo-900 uppercase tracking-wider flex items-center gap-2">
+                    <i class="fa-solid fa-store text-indigo-600"></i> Parameter Toko & Tanggal Transaksi
+                </h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label for="kodeToko" class="block text-xs font-semibold text-slate-700 mb-1">Pilih Toko <span class="text-rose-500">*</span></label>
+                        <select id="kodeToko" required class="w-full bg-white border border-slate-300 text-slate-800 text-xs sm:text-sm rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 p-2.5 shadow-sm font-medium">
+                            <option value="">-- PILIH KODE TOKO --</option>
+                            <option value="253">253 - MDS PALANGKARAYA</option>
+                            <option value="283">283 - MDS A YANI PONTIANAK</option>
+                            <option value="284">284 - MDS Q MALL BANJARBARU</option>
+                            <option value="311">311 - MDS DUTA MALL BANJARMASIN</option>
+                            <option value="322">322 - MDS SINGKAWANG</option>
+                            <option value="327">327 - MDS CITIMALL SAMPIT</option>
+                            <option value="355">355 - MDS BALIKPAPAN SUPERBLOK</option>
+                            <option value="405">405 - MDS LEMBUSWANA SAMARINDA</option>
+                            <option value="408">408 - MDS PLAZA BALIKPAPAN</option>
+                            <option value="412">412 - MDS CITIMALL BONTANG</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="tanggal" class="block text-xs font-semibold text-slate-700 mb-1">Tanggal Transaksi <span class="text-rose-500">*</span></label>
+                        <input type="date" id="tanggal" required class="w-full bg-white border border-slate-300 text-slate-800 text-xs sm:text-sm rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 p-2 shadow-sm font-medium" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 2: REALISASI SALES CHANNEL (7 ITEM NOMINAL) -->
+            <div class="space-y-3">
+                <div class="border-b border-slate-200 pb-2 flex items-center justify-between">
+                    <h3 class="text-xs font-extrabold text-slate-800 uppercase tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-wallet text-indigo-600"></i> Realisasi Channel Sales (Nominal Rp)
+                    </h3>
+                    <span class="text-[10px] text-slate-400">14 Item Daily Entry</span>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                    <div>
+                        <label for="inputDP" class="block text-[11px] font-semibold text-slate-600 mb-1">1. DP (Direct Purchase)</label>
+                        <input type="number" id="inputDP" placeholder="0" step="any" oninput="calcTotalSales()" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-800 font-semibold focus:ring-2 focus:ring-indigo-500 focus:bg-white focus:outline-none transition" />
+                    </div>
+
+                    <div>
+                        <label for="inputCV" class="block text-[11px] font-semibold text-slate-600 mb-1">2. CV (Consignment Vendor)</label>
+                        <input type="number" id="inputCV" placeholder="0" step="any" oninput="calcTotalSales()" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-800 font-semibold focus:ring-2 focus:ring-indigo-500 focus:bg-white focus:outline-none transition" />
+                    </div>
+
+                    <div>
+                        <label for="inputBazaar" class="block text-[11px] font-semibold text-slate-600 mb-1">3. Bazaar</label>
+                        <input type="number" id="inputBazaar" placeholder="0" step="any" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-800 font-semibold focus:ring-2 focus:ring-indigo-500 focus:bg-white focus:outline-none transition" />
+                    </div>
+
+                    <div>
+                        <label for="inputShopTalk" class="block text-[11px] font-semibold text-slate-600 mb-1">4. Shop & Talk</label>
+                        <input type="number" id="inputShopTalk" placeholder="0" step="any" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-800 font-semibold focus:ring-2 focus:ring-indigo-500 focus:bg-white focus:outline-none transition" />
+                    </div>
+
+                    <div>
+                        <label for="inputFFS" class="block text-[11px] font-semibold text-slate-600 mb-1">5. FFS (Free Standing Store)</label>
+                        <input type="number" id="inputFFS" placeholder="0" step="any" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-800 font-semibold focus:ring-2 focus:ring-indigo-500 focus:bg-white focus:outline-none transition" />
+                    </div>
+
+                    <div>
+                        <label for="inputSuko" class="block text-[11px] font-semibold text-slate-600 mb-1">6. SUKO Brand</label>
+                        <input type="number" id="inputSuko" placeholder="0" step="any" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-800 font-semibold focus:ring-2 focus:ring-indigo-500 focus:bg-white focus:outline-none transition" />
+                    </div>
+
+                    <div class="sm:col-span-2">
+                        <label for="inputB2B" class="block text-[11px] font-semibold text-slate-600 mb-1">7. B2B (Business to Business)</label>
+                        <input type="number" id="inputB2B" placeholder="0" step="any" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-800 font-semibold focus:ring-2 focus:ring-indigo-500 focus:bg-white focus:outline-none transition" />
+                    </div>
+                </div>
+
+                <!-- Auto-Calculated Banner -->
+                <div class="bg-indigo-950 text-white rounded-xl p-3 flex items-center justify-between text-xs shadow-md">
+                    <span class="text-indigo-200 font-medium">Total Calculated Sales (DP + CV):</span>
+                    <span id="previewTotalSales" class="font-extrabold text-amber-400 text-sm sm:text-base">Rp 0</span>
+                </div>
+            </div>
+
+            <!-- SECTION 3: SALES DIVISI (4 ITEM NOMINAL) -->
+            <div class="space-y-3">
+                <div class="border-b border-slate-200 pb-2">
+                    <h3 class="text-xs font-extrabold text-slate-800 uppercase tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-layer-group text-indigo-600"></i> Sales per Divisi Product (Nominal Rp)
+                    </h3>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                    <div>
+                        <label for="inputDiv1" class="block text-[11px] font-semibold text-slate-600 mb-1">8. Divisi 1 (Ladies)</label>
+                        <input type="number" id="inputDiv1" placeholder="0" step="any" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-800 font-semibold focus:ring-2 focus:ring-indigo-500 focus:bg-white focus:outline-none transition" />
+                    </div>
+
+                    <div>
+                        <label for="inputDiv2" class="block text-[11px] font-semibold text-slate-600 mb-1">9. Divisi 2 (Shoes)</label>
+                        <input type="number" id="inputDiv2" placeholder="0" step="any" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-800 font-semibold focus:ring-2 focus:ring-indigo-500 focus:bg-white focus:outline-none transition" />
+                    </div>
+
+                    <div>
+                        <label for="inputDiv3" class="block text-[11px] font-semibold text-slate-600 mb-1">10. Divisi 3 (Men)</label>
+                        <input type="number" id="inputDiv3" placeholder="0" step="any" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-800 font-semibold focus:ring-2 focus:ring-indigo-500 focus:bg-white focus:outline-none transition" />
+                    </div>
+
+                    <div>
+                        <label for="inputDiv4" class="block text-[11px] font-semibold text-slate-600 mb-1">11. Divisi 4 (Children)</label>
+                        <input type="number" id="inputDiv4" placeholder="0" step="any" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-800 font-semibold focus:ring-2 focus:ring-indigo-500 focus:bg-white focus:outline-none transition" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 4: OPERATIONAL DRIVERS (3 ITEM ANGKA UTUH) -->
+            <div class="space-y-3">
+                <div class="border-b border-slate-200 pb-2">
+                    <h3 class="text-xs font-extrabold text-slate-800 uppercase tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-chart-pie text-indigo-600"></i> Operational Drivers (Angka Utuh)
+                    </h3>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+                    <div>
+                        <label for="inputQty" class="block text-[11px] font-semibold text-slate-600 mb-1">12. QTY (Pcs)</label>
+                        <input type="number" id="inputQty" placeholder="0" step="1" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-800 font-semibold focus:ring-2 focus:ring-indigo-500 focus:bg-white focus:outline-none transition" />
+                    </div>
+
+                    <div>
+                        <label for="inputTrx" class="block text-[11px] font-semibold text-slate-600 mb-1">13. TRX (Struk Transaksi)</label>
+                        <input type="number" id="inputTrx" placeholder="0" step="1" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-800 font-semibold focus:ring-2 focus:ring-indigo-500 focus:bg-white focus:outline-none transition" />
+                    </div>
+
+                    <div>
+                        <label for="inputTraffic" class="block text-[11px] font-semibold text-slate-600 mb-1">14. Traffic (Pengunjung)</label>
+                        <input type="number" id="inputTraffic" placeholder="0" step="1" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-800 font-semibold focus:ring-2 focus:ring-indigo-500 focus:bg-white focus:outline-none transition" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- BUTTON ACTIONS -->
+            <div class="pt-4 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-end gap-3">
+                <button type="button" onclick="resetForm()" class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-bold transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-rotate-left"></i> Reset Form
+                </button>
+
+                <button type="submit" id="btnSubmit" class="w-full sm:w-auto px-7 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shadow-lg transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-paper-plane"></i> Simpan Data ke Spreadsheet
+                </button>
+            </div>
+
+        </form>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-indigo-950 text-indigo-300 text-center py-3 text-xs border-t border-indigo-900">
+        <p>© 2026 Regional Kalimantan Analytics • Daily Entry Portal</p>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        const API_URL = "https://script.google.com/macros/s/AKfycbyDvQGuOFJVg9tQOUA_lQqL5e0t_Xdl0pDezExbhZ8Pq14zjnPYax1Baz-K6HHtbqM4/exec";
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set tanggal default ke hari ini
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('tanggal').value = today;
+        });
+
+        function calcTotalSales() {
+            const dp = parseFloat(document.getElementById('inputDP').value) || 0;
+            const cv = parseFloat(document.getElementById('inputCV').value) || 0;
+            const total = dp + cv;
+            
+            document.getElementById('previewTotalSales').innerText = new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                maximumFractionDigits: 0
+            }).format(total);
+        }
+
+        async function submitDailySales(e) {
+            e.preventDefault();
+
+            const btnSubmit = document.getElementById('btnSubmit');
+            btnSubmit.disabled = true;
+            btnSubmit.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> Memproses...`;
+
+            hideAlert();
+
+            const payload = {
+                kodeToko: document.getElementById('kodeToko').value,
+                tanggal: document.getElementById('tanggal').value,
+                dp: document.getElementById('inputDP').value,
+                cv: document.getElementById('inputCV').value,
+                bazaar: document.getElementById('inputBazaar').value,
+                shopTalk: document.getElementById('inputShopTalk').value,
+                ffs: document.getElementById('inputFFS').value,
+                suko: document.getElementById('inputSuko').value,
+                b2b: document.getElementById('inputB2B').value,
+                divisi1: document.getElementById('inputDiv1').value,
+                divisi2: document.getElementById('inputDiv2').value,
+                divisi3: document.getElementById('inputDiv3').value,
+                divisi4: document.getElementById('inputDiv4').value,
+                qty: document.getElementById('inputQty').value,
+                trx: document.getElementById('inputTrx').value,
+                traffic: document.getElementById('inputTraffic').value
+            };
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    body: JSON.stringify(payload)
+                });
+
+                const res = await response.json();
+
+                if (res.status === 'success') {
+                    showAlert('success', res.message || 'Data berhasil disimpan ke Spreadsheet!');
+                    resetForm(false); // Reset field input angka, tapi pertahankan toko & tanggal
+                } else {
+                    throw new Error(res.message || 'Gagal memperbarui sheet toko.');
+                }
+
+            } catch (err) {
+                console.error('Error submitting form:', err);
+                showAlert('error', `Gagal menyimpan data: ${err.message}`);
+            } finally {
+                btnSubmit.disabled = false;
+                btnSubmit.innerHTML = `<i class="fa-solid fa-paper-plane"></i> Simpan Data ke Spreadsheet`;
+            }
+        }
+
+        function resetForm(resetMeta = true) {
+            const currentToko = document.getElementById('kodeToko').value;
+            const currentTanggal = document.getElementById('tanggal').value;
+
+            document.getElementById('formEntry').reset();
+
+            if (!resetMeta) {
+                document.getElementById('kodeToko').value = currentToko;
+                document.getElementById('tanggal').value = currentTanggal;
+            } else {
+                document.getElementById('tanggal').value = new Date().toISOString().split('T')[0];
+            }
+
+            calcTotalSales();
+        }
+
+        function showAlert(type, message) {
+            const alertBox = document.getElementById('alertBox');
+            const alertIcon = document.getElementById('alertIcon');
+            const alertMessage = document.getElementById('alertMessage');
+
+            alertBox.classList.remove('hidden', 'bg-emerald-50', 'border-emerald-200', 'text-emerald-800', 'bg-rose-50', 'border-rose-200', 'text-rose-800');
+
+            if (type === 'success') {
+                alertBox.classList.add('bg-emerald-50', 'border-emerald-200', 'text-emerald-800');
+                alertIcon.className = 'fa-solid fa-circle-check text-emerald-600 text-base';
+            } else {
+                alertBox.classList.add('bg-rose-50', 'border-rose-200', 'text-rose-800');
+                alertIcon.className = 'fa-solid fa-circle-exclamation text-rose-600 text-base';
+            }
+
+            alertMessage.innerText = message;
+            alertBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function hideAlert() {
+            document.getElementById('alertBox').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!-- KANVAS BANNER UNSUBMITTED DATES -->
+<style>
+  .banner-container {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin-bottom: 20px;
+  }
+  .banner-card {
+    padding: 16px 20px;
+    border-radius: 10px;
+    font-size: 14px;
+    line-height: 1.5;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+  }
+  .banner-loading {
+    background-color: #e0f2fe;
+    border-left: 5px solid #0284c7;
+    color: #0369a1;
+  }
+  .banner-warning {
+    background-color: #fffbeeb;
+    background-color: #fef3c7;
+    border-left: 5px solid #f59e0b;
+    color: #92400e;
+  }
+  .banner-success {
+    background-color: #dcfce7;
+    border-left: 5px solid #22c55e;
+    color: #166534;
+  }
+  .banner-title {
+    font-weight: 700;
+    font-size: 15px;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .date-badge {
+    display: inline-block;
+    background: #f59e0b;
+    color: #ffffff;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 6px;
+    margin: 2px;
+    font-size: 13px;
+  }
+</style>
+
+<div class="banner-container" id="bannerContainer" style="display: none;">
+  <div id="bannerCard" class="banner-card">
+    <div id="bannerTitle" class="banner-title"></div>
+    <div id="bannerBody"></div>
+  </div>
+</div>
+
+<script>
+  // URL Web App Google Apps Script Kamu
+  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyDvQGuOFJVg9tQOUA_lQqL5e0t_Xdl0pDezExbhZ8Pq14zjnPYax1Baz-K6HHtbqM4/exec"; // Sesuaikan URL Apps Script kamu
+
+  function checkStoreUnsubmittedDates(kodeToko, yearMonth) {
+    const container = document.getElementById("bannerContainer");
+    const card = document.getElementById("bannerCard");
+    const title = document.getElementById("bannerTitle");
+    const body = document.getElementById("bannerBody");
+
+    if (!kodeToko) {
+      container.style.display = "none";
+      return;
+    }
+
+    // Default ke Bulan Berjalan jika yearMonth kosong (Format: YYYY-MM)
+    if (!yearMonth) {
+      const now = new Date();
+      const yyyy = now.getFullYear();
+      const mm = String(now.getMonth() + 1).padStart(2, '0');
+      yearMonth = `${yyyy}-${mm}`;
+    }
+
+    // Tampilkan Loading State
+    container.style.display = "block";
+    card.className = "banner-card banner-loading";
+    title.innerHTML = "🔄 Memeriksa Kelengkapan Data...";
+    body.innerHTML = "Sedang mengecek riwayat tanggal harian di Spreadsheet...";
+
+    // Panggil Backend Apps Script (doGet dengan action getUnsubmittedDates)
+    const targetUrl = `${WEB_APP_URL}?action=getUnsubmittedDates&kodeToko=${encodeURIComponent(kodeToko)}&yearMonth=${encodeURIComponent(yearMonth)}`;
+
+    fetch(targetUrl)
+      .then(res => res.json())
+      .then(res => {
+        if (res.status === "success") {
+          if (res.unsubmittedCount > 0) {
+            // Kondisi ADA Tanggal Kosong
+            card.className = "banner-card banner-warning";
+            title.innerHTML = `⚠️ Peringatan Kelengkapan Data (${res.kodeToko})`;
+            
+            const badges = res.unsubmittedDates.map(d => `<span class="date-badge">${d}</span>`).join(" ");
+            body.innerHTML = `
+              Ada <b>${res.unsubmittedCount} hari</b> di bulan ini yang datanya belum terisi:<br>
+              <div style="margin-top: 8px;"><b>Tanggal:</b> ${badges}</div>
+              <small style="display:block; margin-top: 8px; color: #b45309;">
+                *Silakan pilih tanggal di atas pada form untuk melengkapi data.
+              </small>
+            `;
+          } else {
+            // Kondisi LENGKAP 100%
+            card.className = "banner-card banner-success";
+            title.innerHTML = `✅ Status Data Lengkap (${res.kodeToko})`;
+            body.innerHTML = `Luar biasa! Seluruh data harian MTD untuk toko ini sudah terisi lengkap hingga hari ini.`;
+          }
+        } else {
+          container.style.display = "none";
+        }
+      })
+      .catch(err => {
+        console.error("Gagal memuat status banner:", err);
+        container.style.display = "none";
+      });
+  }
+</script>
