@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Form Daily Sales Entry - Regional Kalimantan</title>
-    
     <!-- PWA Metadata -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#312e81">
@@ -15,7 +14,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="bg-slate-100 font-sans text-slate-800 min-h-screen flex flex-col justify-between antialiased selection:bg-indigo-500 selection:text-white">
-
     <!-- Header / Navbar -->
     <header class="bg-indigo-900 text-white shadow-md sticky top-0 z-50">
         <div class="max-w-3xl mx-auto px-4 py-3.5 flex items-center justify-between">
@@ -91,13 +89,13 @@
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                     <div>
-                        <label for="inputDP" class="block text-[11px] font-semibold text-slate-600 mb-1">1. DP (Direct Purchase)</label>
-                        <input type="number" id="inputDP" placeholder="0" step="any" oninput="calcTotalSales()" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-800 font-semibold focus:ring-2 focus:ring-indigo-500 focus:bg-white focus:outline-none transition" />
+                        <label for="inputDP" class="block text-[11px] font-semibold text-slate-600 mb-1">1. DP (Direct Purchase) <span class="text-rose-500">*</span></label>
+                        <input type="number" id="inputDP" placeholder="0" step="any" required oninput="calcTotalSales()" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-800 font-semibold focus:ring-2 focus:ring-indigo-500 focus:bg-white focus:outline-none transition" />
                     </div>
 
                     <div>
-                        <label for="inputCV" class="block text-[11px] font-semibold text-slate-600 mb-1">2. CV (Consignment Vendor)</label>
-                        <input type="number" id="inputCV" placeholder="0" step="any" oninput="calcTotalSales()" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-800 font-semibold focus:ring-2 focus:ring-indigo-500 focus:bg-white focus:outline-none transition" />
+                        <label for="inputCV" class="block text-[11px] font-semibold text-slate-600 mb-1">2. CV (Consignment Vendor) <span class="text-rose-500">*</span></label>
+                        <input type="number" id="inputCV" placeholder="0" step="any" required oninput="calcTotalSales()" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-800 font-semibold focus:ring-2 focus:ring-indigo-500 focus:bg-white focus:outline-none transition" />
                     </div>
 
                     <div>
@@ -143,23 +141,23 @@
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                     <div>
-                        <label for="inputDiv1" class="block text-[11px] font-semibold text-slate-600 mb-1">8. Divisi 1 (Ladies)</label>
-                        <input type="number" id="inputDiv1" placeholder="0" step="any" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-800 font-semibold focus:ring-2 focus:ring-indigo-500 focus:bg-white focus:outline-none transition" />
+                        <label for="inputDiv1" class="block text-[11px] font-semibold text-slate-600 mb-1">8. Divisi 1 (Ladies) <span class="text-rose-500">*</span></label>
+                        <input type="number" id="inputDiv1" placeholder="0" step="any" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-800 font-semibold focus:ring-2 focus:ring-indigo-500 focus:bg-white focus:outline-none transition" />
                     </div>
 
                     <div>
-                        <label for="inputDiv2" class="block text-[11px] font-semibold text-slate-600 mb-1">9. Divisi 2 (Shoes)</label>
-                        <input type="number" id="inputDiv2" placeholder="0" step="any" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-800 font-semibold focus:ring-2 focus:ring-indigo-500 focus:bg-white focus:outline-none transition" />
+                        <label for="inputDiv2" class="block text-[11px] font-semibold text-slate-600 mb-1">9. Divisi 2 (Shoes) <span class="text-rose-500">*</span></label>
+                        <input type="number" id="inputDiv2" placeholder="0" step="any" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-800 font-semibold focus:ring-2 focus:ring-indigo-500 focus:bg-white focus:outline-none transition" />
                     </div>
 
                     <div>
-                        <label for="inputDiv3" class="block text-[11px] font-semibold text-slate-600 mb-1">10. Divisi 3 (Men)</label>
-                        <input type="number" id="inputDiv3" placeholder="0" step="any" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-800 font-semibold focus:ring-2 focus:ring-indigo-500 focus:bg-white focus:outline-none transition" />
+                        <label for="inputDiv3" class="block text-[11px] font-semibold text-slate-600 mb-1">10. Divisi 3 (Men) <span class="text-rose-500">*</span></label>
+                        <input type="number" id="inputDiv3" placeholder="0" step="any" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-800 font-semibold focus:ring-2 focus:ring-indigo-500 focus:bg-white focus:outline-none transition" />
                     </div>
 
                     <div>
-                        <label for="inputDiv4" class="block text-[11px] font-semibold text-slate-600 mb-1">11. Divisi 4 (Children)</label>
-                        <input type="number" id="inputDiv4" placeholder="0" step="any" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-800 font-semibold focus:ring-2 focus:ring-indigo-500 focus:bg-white focus:outline-none transition" />
+                        <label for="inputDiv4" class="block text-[11px] font-semibold text-slate-600 mb-1">11. Divisi 4 (Children) <span class="text-rose-500">*</span></label>
+                        <input type="number" id="inputDiv4" placeholder="0" step="any" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-800 font-semibold focus:ring-2 focus:ring-indigo-500 focus:bg-white focus:outline-none transition" />
                     </div>
                 </div>
             </div>
@@ -174,18 +172,18 @@
 
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
                     <div>
-                        <label for="inputQty" class="block text-[11px] font-semibold text-slate-600 mb-1">12. QTY (Pcs)</label>
-                        <input type="number" id="inputQty" placeholder="0" step="1" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-800 font-semibold focus:ring-2 focus:ring-indigo-500 focus:bg-white focus:outline-none transition" />
+                        <label for="inputQty" class="block text-[11px] font-semibold text-slate-600 mb-1">12. QTY (Pcs) <span class="text-rose-500">*</span></label>
+                        <input type="number" id="inputQty" placeholder="0" step="1" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-800 font-semibold focus:ring-2 focus:ring-indigo-500 focus:bg-white focus:outline-none transition" />
                     </div>
 
                     <div>
-                        <label for="inputTrx" class="block text-[11px] font-semibold text-slate-600 mb-1">13. TRX (Struk Transaksi)</label>
-                        <input type="number" id="inputTrx" placeholder="0" step="1" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-800 font-semibold focus:ring-2 focus:ring-indigo-500 focus:bg-white focus:outline-none transition" />
+                        <label for="inputTrx" class="block text-[11px] font-semibold text-slate-600 mb-1">13. TRX (Struk Transaksi) <span class="text-rose-500">*</span></label>
+                        <input type="number" id="inputTrx" placeholder="0" step="1" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-800 font-semibold focus:ring-2 focus:ring-indigo-500 focus:bg-white focus:outline-none transition" />
                     </div>
 
                     <div>
-                        <label for="inputTraffic" class="block text-[11px] font-semibold text-slate-600 mb-1">14. Traffic (Pengunjung)</label>
-                        <input type="number" id="inputTraffic" placeholder="0" step="1" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-800 font-semibold focus:ring-2 focus:ring-indigo-500 focus:bg-white focus:outline-none transition" />
+                        <label for="inputTraffic" class="block text-[11px] font-semibold text-slate-600 mb-1">14. Traffic (Pengunjung) <span class="text-rose-500">*</span></label>
+                        <input type="number" id="inputTraffic" placeholder="0" step="1" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-800 font-semibold focus:ring-2 focus:ring-indigo-500 focus:bg-white focus:outline-none transition" />
                     </div>
                 </div>
             </div>

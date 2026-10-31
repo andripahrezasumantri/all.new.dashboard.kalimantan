@@ -1,0 +1,59 @@
+/* style.css - Clean, Professional Enterprise Dashboard Theme (Anti-AI Slop) */
+
+:root {
+--bg-app: #f8fafc;
+--card-bg: #ffffff;
+--text-main: #0f172a;
+--text-muted: #64748b;
+--border-color: #e2e8f0;
+--primary: #0284c7;
+}
+
+body {
+background-color: var(--bg-app) !important;
+color: var(--text-main) !important;
+font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+-webkit-font-smoothing: antialiased;
+}
+
+/* Transform generic cards into clean, solid enterprise boxes */
+.glass-card, .bg-white, section {
+background-color: var(--card-bg) !important;
+border: 1px solid var(--border-color) !important;
+border-radius: 0.75rem !important;
+box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.04) !important;
+}
+
+/* Refine button and link aesthetics */
+button, a.bg-indigo-50 {
+border-radius: 0.5rem !important;
+font-weight: 500 !important;
+transition: all 0.15s ease-in-out !important;
+}
+
+/* Professional table styling */
+table {
+width: 100%;
+border-collapse: collapse;
+}
+
+th {
+background-color: #f1f5f9;
+color: #334155;
+font-weight: 600;
+text-transform: uppercase;
+font-size: 0.75rem;
+letter-spacing: 0.05em;
+padding: 0.75rem 1rem;
+border-bottom: 2px solid var(--border-color);
+}
+
+td {
+padding: 0.75rem 1rem;
+border-bottom: 1px solid var(--border-color);
+font-size: 0.875rem;
+}
+
+tr:hover td {
+background-color: #f8fafc;
+}
