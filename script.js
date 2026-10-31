@@ -1,9 +1,9 @@
 /**
- * SCRIPT.JS - Ultimate Direct Injection Version
+ * SCRIPT.JS - Header Action Buttons Auto-Injector & Compact Layout
  * Regional Kalimantan Dashboard
  */
 
-// Otomatis inject style.css
+// 1. Otomatis inject style.css ke header halaman
 function injectStyleCSS() {
     if (document.getElementById('customDashboardStyle')) return;
     const linkCss = document.createElement('link');
@@ -13,71 +13,56 @@ function injectStyleCSS() {
     document.head.appendChild(linkCss);
 }
 
-// Injeksi tombol aksi secara langsung ke header & sebelah form entry
+// 2. Dynamic Action Buttons Injection & Compact Form Entry Styling
 function injectHeaderActionButtons() {
-    // 1. Cari elemen <header> utama
-    const header = document.querySelector('header');
-    if (!header) return;
+    // Cari tombol hijau Form Entry yang ada di index.html
+    const formEntryBtn = document.querySelector('a[href="entry.html"]');
+    
+    if (formEntryBtn && formEntryBtn.parentNode) {
+        // A. Ubah tombol hijau Form Entry jadi lebih compact / kecil
+        formEntryBtn.className = "px-2.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold shadow transition flex items-center gap-1.5 shrink-0";
 
-    // Cari area div flex di dalam header untuk menaruh ikon Spreadsheet & Lampu
-    let headerContainer = header.querySelector('div.flex.items-center.gap-2') || header.querySelector('div');
+        const parentContainer = formEntryBtn.parentNode;
 
-    if (headerContainer) {
-        // A. Ikon Google Spreadsheet (Read-Only)
+        // B. Buat dan pasang Ikon Google Spreadsheet (Read-Only) di sebelah kiri tombol hijau
         if (!document.getElementById('spreadsheetIconButton')) {
             const spreadsheetBtn = document.createElement('a');
             spreadsheetBtn.id = 'spreadsheetIconButton';
             spreadsheetBtn.href = 'https://docs.google.com/spreadsheets/d/1Iu6D1ahvl9E7RQN7mP30TeYtbDi0LO1FyGHhhF4cRSc/edit?usp=sharing';
             spreadsheetBtn.target = '_blank';
-            spreadsheetBtn.className = 'w-9 h-9 bg-slate-800 hover:bg-slate-700 text-indigo-400 text-sm rounded-xl transition border border-slate-700 flex items-center justify-center shadow-sm cursor-pointer ml-2';
+            spreadsheetBtn.className = 'w-8 h-8 bg-slate-800 hover:bg-slate-700 text-indigo-400 text-xs rounded-lg transition border border-slate-700 flex items-center justify-center shadow-sm cursor-pointer shrink-0';
             spreadsheetBtn.innerHTML = '<i class="fa-solid fa-file-excel"></i>';
             spreadsheetBtn.title = "Buka Google Spreadsheet (Read-Only)";
-            headerContainer.appendChild(spreadsheetBtn);
+            parentContainer.insertBefore(spreadsheetBtn, formEntryBtn);
         }
 
-        // B. Ikon Lampu (Panduan / README)
-        if (!document.getElementById('readmeIconButton')) {
-            const readmeBtn = document.createElement('button');
-            readmeBtn.id = 'readmeIconButton';
-            readmeBtn.type = 'button';
-            readmeBtn.className = 'w-9 h-9 bg-slate-800 hover:bg-slate-700 text-amber-400 text-sm rounded-xl transition border border-slate-700 flex items-center justify-center shadow-sm cursor-pointer ml-2';
-            readmeBtn.innerHTML = '<i class="fa-solid fa-lightbulb"></i>';
-            readmeBtn.title = "Panduan Aplikasi (README)";
-            readmeBtn.onclick = openReadmeModal;
-            headerContainer.appendChild(readmeBtn);
-        }
-    }
-
-    // 2. Masukkan Ikon Audit & Ikon Spreadsheet di sebelah kiri Tombol Hijau "+ Form Entry"
-    const formEntryBtn = document.querySelector('a[href="entry.html"]');
-    if (formEntryBtn && formEntryBtn.parentNode) {
-        
-        // Ikon Spreadsheet kecil di dekat form entry (opsional/tambahan akses cepat)
-        let inlineSpreadsheet = document.getElementById('inlineSpreadsheetIcon');
-        if (!inlineSpreadsheet) {
-            inlineSpreadsheet = document.createElement('a');
-            inlineSpreadsheet.id = 'inlineSpreadsheetIcon';
-            inlineSpreadsheet.href = 'https://docs.google.com/spreadsheets/d/1Iu6D1ahvl9E7RQN7mP30TeYtbDi0LO1FyGHhhF4cRSc/edit?usp=sharing';
-            inlineSpreadsheet.target = '_blank';
-            inlineSpreadsheet.className = 'w-9 h-9 bg-slate-800 hover:bg-slate-700 text-indigo-400 text-sm rounded-xl transition border border-slate-700 flex items-center justify-center shadow-sm cursor-pointer mr-2';
-            inlineSpreadsheet.innerHTML = '<i class="fa-solid fa-file-excel"></i>';
-            inlineSpreadsheet.title = "Buka Google Spreadsheet";
-            formEntryBtn.parentNode.insertBefore(inlineSpreadsheet, formEntryBtn);
-        }
-
-        // Ikon Audit (Clipboard Check)
+        // C. Buat dan pasang Ikon Audit di sebelah kiri ikon Google Spreadsheet
         if (!document.getElementById('auditIconButton')) {
+            const spreadsheetBtn = document.getElementById('spreadsheetIconButton');
             const auditBtn = document.createElement('a');
             auditBtn.id = 'auditIconButton';
             auditBtn.href = 'audit.html';
-            auditBtn.className = 'w-9 h-9 bg-slate-800 hover:bg-slate-700 text-emerald-400 text-sm rounded-xl transition border border-slate-700 flex items-center justify-center shadow-sm cursor-pointer mr-2';
+            auditBtn.className = 'w-8 h-8 bg-slate-800 hover:bg-slate-700 text-emerald-400 text-xs rounded-lg transition border border-slate-700 flex items-center justify-center shadow-sm cursor-pointer shrink-0';
             auditBtn.innerHTML = '<i class="fa-solid fa-clipboard-check"></i>';
             auditBtn.title = "Audit Kelengkapan Data Input Toko";
-            formEntryBtn.parentNode.insertBefore(auditBtn, inlineSpreadsheet);
+            parentContainer.insertBefore(auditBtn, spreadsheetBtn);
+        }
+
+        // D. Buat dan pasang Ikon Lampu (README) di sebelah kiri ikon Audit
+        if (!document.getElementById('readmeIconButton')) {
+            const auditBtn = document.getElementById('auditIconButton');
+            const readmeBtn = document.createElement('button');
+            readmeBtn.id = 'readmeIconButton';
+            readmeBtn.type = 'button';
+            readmeBtn.className = 'w-8 h-8 bg-slate-800 hover:bg-slate-700 text-amber-400 text-xs rounded-lg transition border border-slate-700 flex items-center justify-center shadow-sm cursor-pointer shrink-0';
+            readmeBtn.innerHTML = '<i class="fa-solid fa-lightbulb"></i>';
+            readmeBtn.title = "Panduan Aplikasi (README)";
+            readmeBtn.onclick = openReadmeModal;
+            parentContainer.insertBefore(readmeBtn, auditBtn);
         }
     }
 
-    // 3. Buat Struktur Modal Pop-up README di Balik Layar
+    // 3. Buat Struktur Modal Pop-up README di Balik Layar (jika belum ada)
     if (!document.getElementById('readmeModalContainer')) {
         const modalWrapper = document.createElement('div');
         modalWrapper.id = 'readmeModalContainer';
@@ -106,7 +91,7 @@ function injectHeaderActionButtons() {
                     <hr class="border-slate-100">
                     <div>
                         <h4 class="font-bold text-indigo-900 text-sm uppercase mb-1"><i class="fa-solid fa-pen-to-square text-indigo-600"></i> 2. Input Data Harian</h4>
-                        <p class="text-slate-600">Gunakan tombol hijau <b>+ Form Entry</b> di pojok kanan atas untuk memasukkan data penjualan harian secara lengkap (10 getItem wajib).</p>
+                        <p class="text-slate-600">Gunakan tombol <b>Form Entry</b> di header untuk memasukkan data penjualan harian secara lengkap.</p>
                     </div>
                 </div>
                 <div class="bg-slate-50 px-6 py-3.5 border-t border-slate-200 flex items-center justify-between">
